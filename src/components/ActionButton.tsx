@@ -7,10 +7,10 @@ import Button from './Button'
 import Row, { RowProps } from './Row'
 import Tooltip from './Tooltip'
 
-const StyledButton = styled(Button)<{ shouldUseDisabledColor?: boolean }>`
-  border-radius: ${({ theme }) => theme.borderRadius.small}em;
+const StyledButton = styled(Button)<{ shouldUseDisabledColor?: boolean; narrow?: boolean }>`
+  border-radius: ${({ theme, narrow }) => (narrow ? theme.borderRadius.small : theme.borderRadius.medium)}rem;
   flex-grow: 1;
-  max-height: 56px;
+  max-height: ${({ narrow }) => (narrow ? '2.5rem' : '3.5rem')};
   transition: background-color ${AnimationSpeed.Medium} ease-out, border-radius ${AnimationSpeed.Medium} ease-out,
     flex-grow ${AnimationSpeed.Medium} ease-out;
   ${({ theme, disabled, shouldUseDisabledColor }) =>
@@ -38,9 +38,9 @@ const grow = keyframes`
 `
 
 const actionCss = css`
+  align-items: center;
   border: 1px solid ${({ theme }) => theme.outline};
-  padding: calc(0.5em - 1px);
-  padding-left: calc(0.75em - 1px);
+  padding: calc(0.25rem - 1px) calc(0.75rem - 1px);
 
   ${ActionRow} {
     animation: ${grow} ${AnimationSpeed.Medium} ease-in;
@@ -51,17 +51,18 @@ const actionCss = css`
 
   ${StyledButton} {
     /* Subtract the padding from the borderRadius so that it nests properly. */
-    border-radius: ${({ theme }) => theme.borderRadius.small}em;
+    border-radius: ${({ theme }) => theme.borderRadius.small}rem;
     flex-grow: 0;
-    padding: 0 0.75em;
+    height: 2.5rem;
+    padding: 0 0.75rem;
   }
 `
 
-export const Overlay = styled(Row)<{ hasAction: boolean }>`
-  border-radius: ${({ theme }) => theme.borderRadius.small}em;
+export const Overlay = styled(Row)<{ hasAction: boolean; narrow?: boolean }>`
+  border-radius: ${({ theme, narrow }) => (narrow ? theme.borderRadius.small : theme.borderRadius.medium)}rem;
   flex-flow: row-reverse nowrap;
-  margin-top: 0.25em;
-  min-height: 3.5em;
+  margin-top: 0.25rem;
+  min-height: ${({ narrow }) => (narrow ? '2.5rem' : '3.5rem')};
   transition: padding ${AnimationSpeed.Medium} ease-out;
   ${({ hasAction }) => hasAction && actionCss}
 `
@@ -84,6 +85,7 @@ interface BaseProps {
   action?: Action
   wrapperProps?: Omit<React.HtmlHTMLAttributes<HTMLDivElement>, keyof RowProps>
   shouldUseDisabledColor?: boolean
+  narrow?: boolean
 }
 
 export type ActionButtonProps = BaseProps & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof BaseProps>
@@ -96,6 +98,7 @@ export default function ActionButton({
   onClick,
   children,
   wrapperProps,
+  narrow,
   ...rest
 }: ActionButtonProps) {
   const textColor = useMemo(() => {
@@ -115,17 +118,27 @@ export default function ActionButton({
     }
   }, [color, disabled])
 
+  const buttonSize = useMemo(() => (narrow ? 'small' : action ? 'medium' : 'large'), [narrow, action])
+
   return (
-    <Overlay data-testid="action-button" hasAction={Boolean(action)} flex align="stretch" {...wrapperProps}>
+    <Overlay
+      data-testid="action-button"
+      hasAction={Boolean(action)}
+      flex
+      align="stretch"
+      narrow={narrow}
+      {...wrapperProps}
+    >
       {!action?.hideButton && (
         <StyledButton
           color={color}
           disabled={disabled || action?.disableButton}
           shouldUseDisabledColor={shouldUseDisabledColor}
           onClick={action?.onClick || onClick}
+          narrow={narrow}
           {...rest}
         >
-          <ThemedText.TransitionButton buttonSize={action ? 'medium' : 'large'} color={textColor}>
+          <ThemedText.TransitionButton buttonSize={buttonSize} color={textColor}>
             {action?.children || children}
           </ThemedText.TransitionButton>
         </StyledButton>

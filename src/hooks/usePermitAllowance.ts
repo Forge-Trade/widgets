@@ -1,13 +1,18 @@
-import { signTypedData } from '@uniswap/conedison/provider'
+import { t } from '@lingui/macro'
+import { signTypedData } from '@uniswap/conedison/provider/signing'
 import { AllowanceTransfer, MaxAllowanceTransferAmount, PERMIT2_ADDRESS, PermitSingle } from '@uniswap/permit2-sdk'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
 import { useWeb3React } from '@web3-react/core'
 import PERMIT2_ABI from 'abis/permit2.json'
 import { Permit2 } from 'abis/types'
+import { UserRejectedRequestError, WidgetError, WidgetPromise } from 'errors'
 import { useSingleCallResult } from 'hooks/multicall'
 import { useContract } from 'hooks/useContract'
 import ms from 'ms.macro'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { isUserRejection } from 'utils/jsonRpcError'
+
+import { usePerfEventHandler } from './usePerfEventHandler'
 
 const PERMIT_EXPIRATION = ms`30d`
 const PERMIT_SIG_EXPIRATION = ms`30m`
@@ -56,33 +61,46 @@ export function useUpdatePermitAllowance(
 ) {
   const { account, chainId, provider } = useWeb3React()
 
-  return useCallback(async () => {
-    try {
-      if (!chainId) throw new Error('missing chainId')
-      if (!provider) throw new Error('missing provider')
-      if (!token) throw new Error('missing token')
-      if (!spender) throw new Error('missing spender')
-      if (nonce === undefined) throw new Error('missing nonce')
+  const updatePermitAllowance = useCallback(
+    () =>
+      WidgetPromise.from(
+        async () => {
+          if (!chainId) throw new Error('missing chainId')
+          if (!provider) throw new Error('missing provider')
+          if (!token) throw new Error('missing token')
+          if (!spender) throw new Error('missing spender')
+          if (nonce === undefined) throw new Error('missing nonce')
 
-      const permit: Permit = {
-        details: {
-          token: token.address,
-          amount: MaxAllowanceTransferAmount,
-          expiration: toDeadline(PERMIT_EXPIRATION),
-          nonce,
+          const permit: Permit = {
+            details: {
+              token: token.address,
+              amount: MaxAllowanceTransferAmount,
+              expiration: toDeadline(PERMIT_EXPIRATION),
+              nonce,
+            },
+            spender,
+            sigDeadline: toDeadline(PERMIT_SIG_EXPIRATION),
+          }
+
+          const { domain, types, values } = AllowanceTransfer.getPermitData(permit, PERMIT2_ADDRESS, chainId)
+          // Use conedison's signTypedData for better x-wallet compatibility.
+          const signature = await signTypedData(provider.getSigner(account), domain, types, values)
+          onPermitSignature?.({ ...permit, signature })
         },
-        spender,
-        sigDeadline: toDeadline(PERMIT_SIG_EXPIRATION),
-      }
+        null,
+        (error) => {
+          if (isUserRejection(error)) throw new UserRejectedRequestError()
 
-      const { domain, types, values } = AllowanceTransfer.getPermitData(permit, PERMIT2_ADDRESS, chainId)
-      // Use conedison's signTypedData for better x-wallet compatibility.
-      const signature = await signTypedData(provider.getSigner(account), domain, types, values)
-      onPermitSignature?.({ ...permit, signature })
-      return
-    } catch (e: unknown) {
-      const symbol = token?.symbol ?? 'Token'
-      throw new Error(`${symbol} permit allowance failed: ${e instanceof Error ? e.message : e}`)
-    }
-  }, [account, chainId, nonce, onPermitSignature, provider, spender, token])
+          const symbol = token?.symbol ?? 'Token'
+          throw new WidgetError({
+            message: t`${symbol} permit allowance failed: ${(error as any)?.message ?? error}`,
+            error,
+          })
+        }
+      ),
+    [account, chainId, nonce, onPermitSignature, provider, spender, token]
+  )
+
+  const args = useMemo(() => (token && spender ? { token, spender } : undefined), [spender, token])
+  return usePerfEventHandler('onPermit2Allowance', args, updatePermitAllowance)
 }

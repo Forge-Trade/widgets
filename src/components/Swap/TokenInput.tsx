@@ -18,14 +18,12 @@ const TokenInputRow = styled(Row)`
 
 const ValueInput = styled(DecimalInput)`
   color: ${({ theme }) => theme.primary};
-  height: 1.5em;
-  margin: -0.25em 0;
 
-  ${loadingTransitionCss};
+  ${loadingTransitionCss}
 `
 
 const TokenInputColumn = styled(Column)`
-  margin: 0.25em 1em 0;
+  margin: 0.25rem 1rem 0;
 `
 
 export interface TokenInputHandle {

@@ -1,5 +1,5 @@
 // a list of tokens by chain
-import { Token } from '@uniswap/sdk-core'
+import { NativeCurrency, Token } from '@uniswap/sdk-core'
 
 import { SupportedChainId } from './chains'
 import {
@@ -9,12 +9,14 @@ import {
   CUSD_CELO,
   DAI,
   DAI_ARBITRUM_ONE,
+  DAI_BASE,
   DAI_OPTIMISM,
   DAI_POLYGON,
   ETH2X_FLI,
   FEI,
   FRAX,
   FXS,
+  nativeOnChain,
   PORTAL_ETH_CELO,
   PORTAL_USDC_CELO,
   renBTC,
@@ -22,10 +24,13 @@ import {
   sETH2,
   SWISE,
   TRIBE,
+  USDC_BASE,
+  USDC_BNB_CHAIN,
   USDC_MAINNET,
   USDC_POLYGON,
   USDT,
   USDT_ARBITRUM_ONE,
+  USDT_BNB_CHAIN,
   USDT_OPTIMISM,
   USDT_POLYGON,
   WBTC,
@@ -36,7 +41,7 @@ import {
 } from './tokens'
 
 type ChainTokenList = {
-  readonly [chainId: number]: Token[]
+  readonly [chainId: number]: Array<Token | NativeCurrency>
 }
 
 const WRAPPED_NATIVE_CURRENCIES_ONLY: ChainTokenList = Object.fromEntries(
@@ -49,11 +54,12 @@ const WRAPPED_NATIVE_CURRENCIES_ONLY: ChainTokenList = Object.fromEntries(
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WRAPPED_NATIVE_CURRENCIES_ONLY,
   [SupportedChainId.MAINNET]: [
-    ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.MAINNET],
+    nativeOnChain(SupportedChainId.MAINNET),
     DAI,
     USDC_MAINNET,
     USDT,
     WBTC,
+    ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.MAINNET],
   ],
   [SupportedChainId.OPTIMISM]: [
     ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.OPTIMISM],
@@ -82,6 +88,13 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     PORTAL_USDC_CELO,
     PORTAL_ETH_CELO,
   ],
+  [SupportedChainId.BNB]: [
+    nativeOnChain(SupportedChainId.BNB),
+    USDC_BNB_CHAIN,
+    USDT_BNB_CHAIN,
+    ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.BNB],
+  ],
+  [SupportedChainId.BASE]: [...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.BASE], DAI_BASE, USDC_BASE],
 }
 export const ADDITIONAL_BASES: { [chainId: number]: { [tokenAddress: string]: Token[] } } = {
   [SupportedChainId.MAINNET]: {

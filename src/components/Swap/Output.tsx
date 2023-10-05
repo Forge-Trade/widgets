@@ -13,8 +13,7 @@ import { FieldWrapper } from './Input'
 export const colorAtom = atom<string | undefined>(undefined)
 
 const OutputWrapper = styled(FieldWrapper)<{ hasColor?: boolean | null; isWide: boolean }>`
-  border-bottom: 1px solid ${({ theme }) => theme.container};
-  padding: ${({ isWide }) => (isWide ? '1em 0' : '1.5em 0 1em')};
+  padding: ${({ isWide }) => (isWide ? '1rem 0' : '1.5rem 0 1rem')};
 
   // Set transitions to reduce color flashes when switching color/token.
   // When color loads, transition the background so that it transitions from the empty or last state, but not _to_ the empty state.
@@ -29,8 +28,7 @@ const OutputWrapper = styled(FieldWrapper)<{ hasColor?: boolean | null; isWide: 
 `
 
 export default function Output() {
-  const { impact } = useSwapInfo()
-
+  const { fiatValueChange } = useSwapInfo()
   const [currency] = useSwapCurrency(Field.OUTPUT)
   const overrideColor = useAtomValue(colorAtom)
   const dynamicColor = useCurrencyColor(currency)
@@ -44,7 +42,7 @@ export default function Output() {
       <OutputWrapper
         isWide={isWideWidget}
         field={Field.OUTPUT}
-        impact={impact}
+        fiatValueChange={fiatValueChange}
         hasColor={hasColor}
         subheader={t`You receive`}
       />

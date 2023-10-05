@@ -1,4 +1,5 @@
 import { useWeb3React } from '@web3-react/core'
+import { isSupportedChainId } from 'constants/chainInfo'
 import { SupportedChainId } from 'constants/chains'
 import { ChainError, useSwapInfo } from 'hooks/swap'
 import { SwapApprovalState } from 'hooks/swap/useSwapApproval'
@@ -12,11 +13,7 @@ import SwapButton from './SwapButton'
 import SwitchChainButton from './SwitchChainButton'
 import WrapButton from './WrapButton'
 
-interface SwapActionButtonProps {
-  hideConnectionUI?: boolean
-}
-
-export default function SwapActionButton({ hideConnectionUI }: SwapActionButtonProps) {
+export default function SwapActionButton() {
   const { account, isActive } = useWeb3React()
   const {
     [Field.INPUT]: { currency: inputCurrency, amount: inputCurrencyAmount, balance: inputCurrencyBalance },
@@ -32,16 +29,18 @@ export default function SwapActionButton({ hideConnectionUI }: SwapActionButtonP
       (!permit2Enabled && approval.state !== SwapApprovalState.APPROVED) ||
       error !== undefined ||
       (!isWrap && !trade) ||
-      !(inputCurrencyAmount && inputCurrencyBalance) ||
-      inputCurrencyBalance.lessThan(inputCurrencyAmount),
+      !inputCurrencyAmount ||
+      // If there is no balance loaded, we should default to isDisabled=false
+      Boolean(inputCurrencyBalance?.lessThan(inputCurrencyAmount)),
     [permit2Enabled, approval.state, error, isWrap, trade, inputCurrencyAmount, inputCurrencyBalance]
   )
 
   if (!account || !isActive) {
-    return hideConnectionUI ? null : <ConnectWalletButton />
-  } else if (error === ChainError.MISMATCHED_CHAINS) {
-    const tokenChainId = inputCurrency?.chainId ?? outputCurrency?.chainId ?? SupportedChainId.MAINNET
-    return <SwitchChainButton chainId={tokenChainId} />
+    return <ConnectWalletButton />
+  } else if (error === ChainError.MISMATCHED_CHAINS || error === ChainError.UNSUPPORTED_CHAIN) {
+    const tokenChainId = inputCurrency?.chainId ?? outputCurrency?.chainId
+    const supportedTokenChainId = isSupportedChainId(tokenChainId) ? tokenChainId : SupportedChainId.MAINNET
+    return <SwitchChainButton chainId={supportedTokenChainId} />
   } else if (isWrap) {
     return <WrapButton disabled={isDisabled} />
   } else {

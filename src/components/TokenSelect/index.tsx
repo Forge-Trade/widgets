@@ -2,6 +2,7 @@ import { t, Trans } from '@lingui/macro'
 import { Currency } from '@uniswap/sdk-core'
 import { useWeb3React } from '@web3-react/core'
 import { inputCss, StringInput } from 'components/Input'
+import { ResponsiveDialog } from 'components/ResponsiveDialog'
 import { useConditionalHandler } from 'hooks/useConditionalHandler'
 import { useCurrencyBalances } from 'hooks/useCurrencyBalance'
 import useNativeCurrency from 'hooks/useNativeCurrency'
@@ -14,7 +15,7 @@ import styled from 'styled-components/macro'
 import { ThemedText } from 'theme'
 
 import Column from '../Column'
-import Dialog, { Header } from '../Dialog'
+import Dialog, { Header, useIsDialogPageCentered } from '../Dialog'
 import Row from '../Row'
 import Rule from '../Rule'
 import CommonBases from './CommonBases'
@@ -25,6 +26,17 @@ import TokenOptionsSkeleton from './TokenOptionsSkeleton'
 
 const SearchInputContainer = styled(Row)`
   ${inputCss}
+`
+
+const TokenSelectContainer = styled.div<{ $pageCentered: boolean }>`
+  border-radius: ${({ theme }) => theme.borderRadius.medium}rem;
+  min-height: ${($pageCentered) => ($pageCentered ? 'unset' : '100%')};
+  min-width: ${({ $pageCentered }) => ($pageCentered ? "min(400px, '100vw')" : 'auto')};
+  overflow: hidden;
+  padding: 0.5rem 0 0;
+  @supports (overflow: clip) {
+    overflow: 'clip';
+  }
 `
 
 function usePrefetchBalances() {
@@ -50,10 +62,12 @@ interface TokenSelectDialogProps {
   onClose: () => void
 }
 
-export function TokenSelectDialog({ value, onSelect, onClose }: TokenSelectDialogProps) {
+export function TokenSelectDialogContent({ value, onSelect, onClose }: TokenSelectDialogProps) {
   const [query, setQuery] = useState('')
   const list = useTokenList()
   const tokens = useQueryTokens(query, list)
+
+  const isPageCentered = useIsDialogPageCentered()
 
   const isTokenListLoaded = useIsTokenListLoaded()
   const areBalancesLoaded = useAreBalancesLoaded()
@@ -81,30 +95,32 @@ export function TokenSelectDialog({ value, onSelect, onClose }: TokenSelectDialo
   if (!listHasTokens && isLoaded) {
     return (
       <Dialog color="container" onClose={onClose}>
-        <Header title={<Trans>Select a token</Trans>} />
+        <Header title={<Trans>Select token</Trans>} />
         <NoTokensAvailableOnNetwork />
       </Dialog>
     )
   }
   return (
-    <Dialog color="container" onClose={onClose}>
-      <Header title={<Trans>Select a token</Trans>} />
+    <TokenSelectContainer $pageCentered={isPageCentered ?? false}>
+      <Header title={<Trans>Select token</Trans>} />
       <Column gap={0.75}>
-        <Row pad={0.75} grow>
-          <SearchInputContainer gap={0.75} justify="start" flex>
-            <Search color="secondary" />
-            <ThemedText.Body1 flexGrow={1}>
-              <StringInput
-                value={query}
-                onChange={setQuery}
-                placeholder={t`Search by token name or address`}
-                onKeyDown={options?.onKeyDown}
-                ref={input}
-              />
-            </ThemedText.Body1>
-          </SearchInputContainer>
-        </Row>
-        <CommonBases chainId={chainId} onSelect={onSelect} selected={value} />
+        <Column gap={0.75} style={{ margin: '0 0.5rem' }}>
+          <Row pad={0.75} grow>
+            <SearchInputContainer gap={0.75} justify="start" flex>
+              <Search color="secondary" />
+              <ThemedText.Body1 flexGrow={1}>
+                <StringInput
+                  value={query}
+                  onChange={setQuery}
+                  placeholder={t`Search by token name or address`}
+                  onKeyDown={options?.onKeyDown}
+                  ref={input}
+                />
+              </ThemedText.Body1>
+            </SearchInputContainer>
+          </Row>
+          <CommonBases chainId={chainId} onSelect={onSelect} selected={value} />
+        </Column>
         <Rule padded />
       </Column>
       {isLoaded ? (
@@ -122,7 +138,7 @@ export function TokenSelectDialog({ value, onSelect, onClose }: TokenSelectDialo
       ) : (
         <TokenOptionsSkeleton />
       )}
-    </Dialog>
+    </TokenSelectContainer>
   )
 }
 
@@ -149,10 +165,13 @@ export default memo(function TokenSelect({ field, value, approved, disabled, onS
     },
     [onSelect, setOpen]
   )
+
   return (
     <>
       <TokenButton value={value} approved={approved} disabled={disabled} onClick={onOpen} />
-      {open && <TokenSelectDialog value={value} onSelect={selectAndClose} onClose={() => setOpen(false)} />}
+      <ResponsiveDialog open={open} setOpen={setOpen}>
+        <TokenSelectDialogContent value={value} onSelect={selectAndClose} onClose={() => setOpen(false)} />
+      </ResponsiveDialog>
     </>
   )
 })

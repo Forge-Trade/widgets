@@ -2,13 +2,22 @@ import 'wicg-inert'
 
 import { globalFontStyles } from 'css/font'
 import { useOnEscapeHandler } from 'hooks/useOnEscapeHandler'
-import { largeIconCss, X } from 'icons'
+import { largeIconCss, StyledXButton } from 'icons'
 import { ArrowLeft } from 'icons'
 import ms from 'ms.macro'
-import { createContext, ReactElement, ReactNode, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, ReactElement, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled, { css, keyframes } from 'styled-components/macro'
-import { AnimationSpeed, Color, Layer, Provider as ThemeProvider, ThemedText, TransitionDuration } from 'theme'
+import {
+  AnimationSpeed,
+  Color,
+  fadeAnimationCss,
+  Layer,
+  Provider as ThemeProvider,
+  SlideAnimationType,
+  ThemedText,
+  TransitionDuration,
+} from 'theme'
 import { useUnmountingAnimation } from 'utils/animations'
 
 import { PopoverBoundaryProvider } from './Popover'
@@ -37,17 +46,7 @@ export enum DialogAnimationType {
   NONE = 'none',
 }
 
-export enum SlideAnimationType {
-  /** Used when the Dialog is closing. */
-  CLOSING = 'closing',
-  /**
-   * Used when the Dialog is paging to another Dialog screen.
-   * Paging occurs when multiple screens are sequenced in the Dialog, so that an action that closes
-   * one will simultaneously open the next. Special-casing paging animations can make the user feel
-   * like they are not leaving the Dialog, despite the initial screen closing.
-   */
-  PAGING = 'paging',
-}
+export const MIN_PAGE_CENTERED_DIALOG_WIDTH = 400
 
 const Context = createContext({
   element: null as HTMLElement | null,
@@ -66,8 +65,6 @@ export function Provider({ value, children, options }: ProviderProps) {
   // If a Dialog is active, mark the main content inert
   const ref = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(false)
-  // If pageCentered dialogs are enabled, we should mount them directly to the document body
-  // and adjust the styling in the renderer below so that they are centered and sized correctly.
   const context = { element: value, active, setActive, options }
   useEffect(() => {
     if (ref.current) {
@@ -94,13 +91,18 @@ export function useDialogAnimationType() {
   return options?.animationType
 }
 
+export function useIsDialogPageCentered() {
+  const { options } = useContext(Context)
+  return options?.pageCentered
+}
+
 const HeaderRow = styled(Row)`
   display: flex;
-  height: 1.75em;
+  height: 1.75rem;
   ${largeIconCss}
 
   justify-content: flex-start;
-  margin: 0.5em 0.75em 0.75em;
+  margin: 0.5rem 0.75rem 0.75rem;
   position: relative;
 `
 
@@ -111,17 +113,10 @@ const StyledBackButton = styled(ArrowLeft)`
   }
 `
 
-const StyledXButton = styled(X)`
-  :hover {
-    cursor: pointer;
-    opacity: 0.6;
-  }
-`
-
 const Title = styled.div`
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%);
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
 `
 
 interface HeaderProps {
@@ -136,19 +131,18 @@ export function Header({ title, closeButton }: HeaderProps) {
     <HeaderRow iconSize={1.25} data-testid="dialog-header">
       {closeButton ? (
         <div onClick={onClose}>{closeButton}</div>
-      ) : animationType === DialogAnimationType.SLIDE ? (
-        <StyledBackButton onClick={onClose} />
       ) : (
-        <StyledXButton onClick={onClose} />
+        animationType === DialogAnimationType.SLIDE && <StyledBackButton onClick={onClose} />
       )}
       <Title>
         <ThemedText.Subhead1>{title}</ThemedText.Subhead1>
       </Title>
+      {!closeButton && animationType !== DialogAnimationType.SLIDE && <StyledXButton onClick={onClose} />}
     </HeaderRow>
   )
 }
 
-export const Modal = styled.div<{ color: Color; constrain?: boolean }>`
+export const Modal = styled.div<{ color: Color; constrain?: boolean; padded?: boolean }>`
   ${globalFontStyles};
 
   background-color: ${({ color, theme }) => theme[color]};
@@ -157,8 +151,8 @@ export const Modal = styled.div<{ color: Color; constrain?: boolean }>`
   flex-direction: column;
   height: ${({ constrain }) => (constrain ? 'fit-content' : '100%')};
   left: 0;
-  outline: ${({ theme }) => `1px solid ${theme.outline}`};
-  padding: 0.5em;
+  outline: ${({ theme, constrain }) => (constrain ? `1px solid ${theme.outline}` : 'transparent')};
+  padding: ${({ padded }) => (padded ? '0.5rem' : '0')};
   position: ${({ constrain }) => (constrain ? 'relative' : 'absolute')};
   right: 0;
   top: 0;
@@ -167,44 +161,32 @@ export const Modal = styled.div<{ color: Color; constrain?: boolean }>`
 
 const slideInLeft = keyframes`
   from {
-    transform: translateX(calc(100% - 0.25em));
+    transform: translateX(calc(100% - 0.25rem));
   }
 `
 const slideOutLeft = keyframes`
   to {
-    transform: translateX(calc(0.25em - 100%));
+    transform: translateX(calc(0.25rem - 100%));
   }
 `
 const slideOutRight = keyframes`
   to {
-    transform: translateX(calc(100% - 0.25em));
+    transform: translateX(calc(100% - 0.25rem));
   }
 `
 
-const fadeIn = keyframes`
-  from {
-    transform: translateY(40px) scale(0.9);
-  }
-`
-
-const fadeOut = keyframes`
-  to {
-    transform: translateY(40px) scale(0.9);
-  }
-`
-
-const HiddenWrapper = styled.div<{ hidden?: boolean; constrain?: boolean }>`
-  border-radius: ${({ theme }) => theme.borderRadius.medium}em;
+const HiddenWrapper = styled.div<{ hideOverflow?: boolean; constrain?: boolean }>`
+  border-radius: ${({ theme }) => theme.borderRadius.large}rem;
   height: ${({ constrain }) => (constrain ? 'fit-content' : '100%')};
   left: 0;
-
-  overflow: ${({ hidden }) => (hidden ? 'hidden' : 'visible')};
+  outline: transparent;
+  overflow: ${({ hideOverflow }) => (hideOverflow ? 'hidden' : 'visible')};
   position: ${({ constrain }) => (constrain ? 'relative' : 'absolute')};
   top: 0;
-  width: ${({ constrain }) => (constrain ? 'fit-content' : '100%')};
 
+  width: ${({ constrain }) => (constrain ? 'fit-content' : '100%')};
   @supports (overflow: clip) {
-    overflow: ${({ hidden }) => (hidden ? 'clip' : 'visible')};
+    overflow: ${({ hideOverflow }) => (hideOverflow ? 'clip' : 'visible')};
   }
 `
 
@@ -216,13 +198,6 @@ const slideAnimationCss = css`
   }
   &.${SlideAnimationType.CLOSING} {
     animation: ${slideOutRight} ${AnimationSpeed.Medium} ease-out;
-  }
-`
-
-const fadeAnimationCss = css`
-  animation: ${fadeIn} ${AnimationSpeed.Fast} ease-in-out;
-  &.${SlideAnimationType.CLOSING} {
-    animation: ${fadeOut} ${AnimationSpeed.Fast} ease-in-out;
   }
 `
 
@@ -240,17 +215,12 @@ const getAnimation = (animationType?: DialogAnimationType) => {
   }
 }
 
-const AnimationWrapper = styled.div<{ animationType?: DialogAnimationType }>`
-  ${Modal} {
-    ${({ animationType }) => getAnimation(animationType)}
-  }
-`
-
-const FullScreenWrapper = styled.div<{ enabled?: boolean }>`
-  ${({ enabled }) =>
+const FullScreenWrapper = styled.div<{ enabled?: boolean; fadeAnimation?: boolean }>`
+  ${({ enabled, fadeAnimation }) =>
     enabled &&
     css`
       align-items: center;
+      ${fadeAnimation ? fadeAnimationCss : ''}
       background-color: ${({ theme }) => theme.scrim};
       display: flex;
       height: 100%;
@@ -259,10 +229,19 @@ const FullScreenWrapper = styled.div<{ enabled?: boolean }>`
       position: fixed;
       top: 0;
       width: 100%;
+
       z-index: ${Layer.DIALOG};
+
+      ${HiddenWrapper} {
+        box-shadow: 0px 40px 120px ${({ theme }) => theme.networkDefaultShadow};
+        min-width: 400px;
+      }
     `}
-  ${HiddenWrapper} {
-    box-shadow: 0px 40px 120px ${({ theme }) => theme.networkDefaultShadow};
+`
+
+const AnimationWrapper = styled.div<{ animationType?: DialogAnimationType }>`
+  ${Modal} {
+    ${({ animationType }) => getAnimation(animationType)}
   }
 `
 
@@ -274,9 +253,10 @@ interface DialogProps {
   children: ReactNode
   onClose?: () => void
   forceContain?: boolean
+  padded?: boolean
 }
 
-export default function Dialog({ color, children, onClose, forceContain }: DialogProps) {
+export default function Dialog({ color, children, onClose, forceContain, padded = true }: DialogProps) {
   const context = useContext(Context)
   useEffect(() => {
     context.setActive(true)
@@ -292,10 +272,18 @@ export default function Dialog({ color, children, onClose, forceContain }: Dialo
     }, TransitionDuration.Medium + PopoverAnimationUpdateDelay)
   }, [])
 
+  // If pageCentered dialogs are enabled, we should mount them directly to the document body
+  // and adjust the styling in the renderer below so that they are centered and sized correctly.
   const pageCentered = context.options?.pageCentered && !forceContain
   const mountPoint = pageCentered ? document.body : context.element
 
+  const closeOnBackgroundClick = useCallback(() => {
+    if (pageCentered && onClose) onClose()
+  }, [onClose, pageCentered])
+
+  const skipUnmountAnimation = context.options?.animationType === DialogAnimationType.NONE
   const modal = useRef<HTMLDivElement>(null)
+  const fullScreenWrapperRef = useRef<HTMLDivElement>(null)
   useUnmountingAnimation(
     popoverRef,
     () => {
@@ -315,7 +303,8 @@ export default function Dialog({ color, children, onClose, forceContain }: Dialo
           return (mountPoint?.childElementCount ?? 0) > 1 ? SlideAnimationType.PAGING : SlideAnimationType.CLOSING
       }
     },
-    modal
+    [fullScreenWrapperRef, modal],
+    skipUnmountAnimation
   )
 
   useOnEscapeHandler(onClose)
@@ -326,17 +315,20 @@ export default function Dialog({ color, children, onClose, forceContain }: Dialo
       <ThemeProvider>
         <PopoverBoundaryProvider value={popoverRef.current} updateTrigger={updatePopover}>
           <div ref={popoverRef}>
-            <FullScreenWrapper enabled={pageCentered} onClick={onClose}>
-              <HiddenWrapper
-                constrain={pageCentered}
-                hidden={context.options?.animationType === DialogAnimationType.SLIDE}
-              >
+            <FullScreenWrapper
+              enabled={pageCentered}
+              fadeAnimation={context.options?.animationType === DialogAnimationType.FADE}
+              onClick={closeOnBackgroundClick}
+              ref={fullScreenWrapperRef}
+            >
+              <HiddenWrapper constrain={pageCentered} hideOverflow={!pageCentered}>
                 <AnimationWrapper animationType={context.options?.animationType}>
                   <OnCloseContext.Provider value={onClose}>
                     <Modal
                       color={color}
                       ref={modal}
                       constrain={pageCentered}
+                      padded={padded}
                       onClick={(e) => {
                         pageCentered && e.stopPropagation()
                       }}

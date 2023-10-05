@@ -2,11 +2,9 @@ import { tokens } from '@uniswap/default-token-list'
 import { TokenInfo } from '@uniswap/token-lists'
 import {
   darkTheme,
-  DEFAULT_LOCALE,
   defaultTheme,
   DialogAnimationType,
   lightTheme,
-  SUPPORTED_LOCALES,
   SupportedChainId,
   SwapWidget,
 } from '@uniswap/widgets'
@@ -29,8 +27,9 @@ const TOKEN_WITH_NO_LOGO = {
 }
 
 const mainnetTokens = tokens.filter((token) => token.chainId === SupportedChainId.MAINNET)
-const tokenLists: Record<string, TokenInfo[]> = {
+const tokenLists: Record<string, TokenInfo[] | string> = {
   Default: tokens,
+  Extended: 'https://extendedtokens.uniswap.org/',
   'Mainnet only': mainnetTokens,
   Logoless: [TOKEN_WITH_NO_LOGO],
 }
@@ -66,12 +65,9 @@ function Fixture() {
 
   const [brandedFooter] = useValue('brandedFooter', { defaultValue: true })
   const [hideConnectionUI] = useValue('hideConnectionUI', { defaultValue: false })
-  const [pageCentered] = useValue('pageCentered', { defaultValue: true })
+  const [pageCentered] = useValue('pageCentered', { defaultValue: false })
 
   const [width] = useValue('width', { defaultValue: 360 })
-
-  const locales = [...SUPPORTED_LOCALES, 'fa-KE (unsupported)', 'pseudo']
-  const locale = useOption('locale', { options: locales, defaultValue: DEFAULT_LOCALE, nullable: false })
 
   const [theme, setTheme] = useValue('theme', { defaultValue: defaultTheme })
   const [darkMode] = useValue('darkMode', { defaultValue: false })
@@ -110,7 +106,6 @@ function Fixture() {
       defaultOutputTokenAddress={defaultOutputToken}
       defaultOutputAmount={defaultOutputAmount}
       hideConnectionUI={hideConnectionUI}
-      locale={locale}
       defaultChainId={defaultChainId}
       provider={connector}
       theme={theme}

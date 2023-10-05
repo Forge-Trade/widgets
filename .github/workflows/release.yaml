@@ -10,12 +10,13 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup
       - run: yarn prepare
 
-      - run: yarn i18n:extract
+      - run: yarn prei18n:compile
       - uses: crowdin/github-action@1.4.8
         with:
           upload_sources: true
@@ -30,6 +31,7 @@ jobs:
           project_id: 458284
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: yarn i18n:compile
 
       - run: yarn test
         if: success()

@@ -8,11 +8,11 @@ import Tooltip from '../../Tooltip'
 
 export const optionCss = (selected: boolean) => css`
   border: 1px solid ${({ theme }) => (selected ? theme.active : '')};
-  border-radius: ${({ theme }) => theme.borderRadius.small}em;
+  border-radius: ${({ theme }) => theme.borderRadius.small}rem;
   color: ${({ theme }) => theme.primary} !important;
   display: grid;
-  grid-gap: 0.25em;
-  padding: calc(0.75em - 1px) 0.625em;
+  grid-gap: 0.25rem;
+  padding: calc(0.75rem - 1px) 0.625rem;
 
   :enabled {
     border: 1px solid ${({ theme }) => (selected ? theme.active : theme.outline)};
@@ -40,10 +40,10 @@ interface LabelProps {
 
 export function Label({ name, tooltip }: LabelProps) {
   return (
-    <Row gap={0.5} justify="flex-start">
+    <Row gap={0.5} justify="flex-start" flex align="center">
       <ThemedText.Subhead2>{name}</ThemedText.Subhead2>
       {tooltip && (
-        <Tooltip placement="top" contained icon={Info}>
+        <Tooltip placement="top" contained icon={Info} iconProps={{ style: { height: '100%' } }}>
           <ThemedText.Caption>{tooltip}</ThemedText.Caption>
         </Tooltip>
       )}

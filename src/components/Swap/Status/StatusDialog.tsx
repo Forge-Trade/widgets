@@ -1,5 +1,6 @@
 import { Trans } from '@lingui/macro'
-import ErrorDialog, { StatusHeader } from 'components/Error/ErrorDialog'
+import ErrorView from 'components/Error/ErrorView'
+import { StatusHeader } from 'components/Error/ErrorView'
 import EtherscanLink from 'components/EtherscanLink'
 import Row from 'components/Row'
 import SwapSummary from 'components/Swap/Summary'
@@ -14,7 +15,7 @@ import ActionButton from '../../ActionButton'
 import Column from '../../Column'
 
 const EtherscanLinkContainer = styled(Row)`
-  padding: 0.75em 0 1.5em;
+  padding: 0.5rem 0 1.5rem;
   transition: opacity ${AnimationSpeed.Medium};
   width: 100%;
   :hover {
@@ -34,39 +35,29 @@ function TransactionStatus({ tx, onClose }: TransactionStatusProps) {
     return tx.receipt?.status ? <Trans>Success</Trans> : <Trans>Transaction submitted</Trans>
   }, [tx.receipt?.status])
 
-  const subheading = useMemo(() => {
-    if (tx.receipt?.status) {
-      return <Trans>Your transaction was successful</Trans>
-    }
-    return null
-  }, [tx.receipt?.status])
-
   return (
-    <Column flex padded gap={0.75} align="stretch" style={{ height: '100%' }} data-testid="status-dialog">
+    <Column flex padded align="stretch" style={{ height: '100%', marginTop: '3rem' }} data-testid="status-dialog">
       <StatusHeader icon={Icon} iconColor={tx.receipt?.status ? 'success' : undefined}>
-        <ThemedText.H4>{heading}</ThemedText.H4>
+        <ThemedText.H4 margin="3rem 0 0">{heading}</ThemedText.H4>
         {tx.info.type === TransactionType.SWAP ? (
           <SwapSummary input={tx.info.trade.inputAmount} output={tx.info.trade.outputAmount} />
         ) : null}
-        <ThemedText.Subhead1>{subheading}</ThemedText.Subhead1>
       </StatusHeader>
+      <EtherscanLinkContainer flex justify="center">
+        <EtherscanLink type={ExplorerDataType.TRANSACTION} data={tx.info.response.hash} showIcon={false} color="active">
+          <Trans>View on Etherscan</Trans>
+        </EtherscanLink>
+      </EtherscanLinkContainer>
       <ActionButton onClick={onClose}>
         <Trans>Close</Trans>
       </ActionButton>
-      <EtherscanLinkContainer flex justify="center">
-        <EtherscanLink type={ExplorerDataType.TRANSACTION} data={tx.info.response.hash} showIcon={false}>
-          <ThemedText.ButtonLarge color="active">
-            <Trans>View on Etherscan</Trans>
-          </ThemedText.ButtonLarge>
-        </EtherscanLink>
-      </EtherscanLinkContainer>
     </Column>
   )
 }
 
 export default function TransactionStatusDialog({ tx, onClose }: TransactionStatusProps) {
   return tx.receipt?.status === 0 ? (
-    <ErrorDialog
+    <ErrorView
       header={<Trans>Your swap failed.</Trans>}
       message={
         <Trans>
@@ -77,6 +68,7 @@ export default function TransactionStatusDialog({ tx, onClose }: TransactionStat
       }
       action={<Trans>Dismiss</Trans>}
       onClick={onClose}
+      onDismiss={onClose}
     />
   ) : (
     <TransactionStatus tx={tx} onClose={onClose} />

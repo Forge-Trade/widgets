@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/macro'
 import { useWeb3React } from '@web3-react/core'
 import { useAsyncError } from 'components/Error/ErrorBoundary'
+import { ResponsiveDialog } from 'components/ResponsiveDialog'
 import { useSwapInfo } from 'hooks/swap'
 import { useSwapCallback } from 'hooks/swap/useSwapCallback'
 import { useConditionalHandler } from 'hooks/useConditionalHandler'
@@ -17,7 +18,6 @@ import { TransactionType } from 'state/transactions'
 import invariant from 'tiny-invariant'
 
 import ActionButton from '../../ActionButton'
-import Dialog from '../../Dialog'
 import { SummaryDialog } from '../Summary'
 import { useCollapseToolbar } from '../Toolbar/ToolbarContext'
 import useOnSubmit from './useOnSubmit'
@@ -29,8 +29,8 @@ import useOnSubmit from './useOnSubmit'
 export default function SwapButton({ disabled }: { disabled: boolean }) {
   const { account, chainId } = useWeb3React()
   const {
-    [Field.INPUT]: { usdc: inputUSDC },
-    [Field.OUTPUT]: { usdc: outputUSDC },
+    [Field.INPUT]: { usdc: inputUSDC, currency: inputCurrency },
+    [Field.OUTPUT]: { usdc: outputUSDC, currency: outputCurrency },
     trade: { trade, gasUseEstimateUSD },
     approval,
     allowance,
@@ -40,6 +40,7 @@ export default function SwapButton({ disabled }: { disabled: boolean }) {
   const deadline = useTransactionDeadline()
   const feeOptions = useAtomValue(feeOptionsAtom)
   const color = useTokenColorExtraction()
+  const missingToken = !inputCurrency || !outputCurrency
 
   const permit2Enabled = usePermit2Enabled()
   const { callback: swapRouterCallback } = useSwapCallback({
@@ -75,14 +76,15 @@ export default function SwapButton({ disabled }: { disabled: boolean }) {
 
         // Set the block containing the response to the oldest valid block to ensure that the
         // completed trade's impact is reflected in future fetched trades.
-        response.wait(1).then((receipt) => {
+        response.response.wait(1).then((receipt) => {
           setOldestValidBlock(receipt.blockNumber)
         })
 
         invariant(trade)
+        // onSubmit expects the TransactionInfo to be returned if the transaction was submitted.
         return {
           type: TransactionType.SWAP,
-          response,
+          response: response.response,
           tradeType: trade.tradeType,
           trade,
           slippageTolerance: slippage.allowed,
@@ -108,10 +110,10 @@ export default function SwapButton({ disabled }: { disabled: boolean }) {
   return (
     <>
       <ActionButton color={color} onClick={onClick} disabled={disabled}>
-        <Trans>Review swap</Trans>
+        {missingToken ? <Trans>Select token</Trans> : <Trans>Review swap</Trans>}
       </ActionButton>
-      {open && trade && (
-        <Dialog color="container" onClose={() => setOpen(false)}>
+      {trade && (
+        <ResponsiveDialog open={open} setOpen={setOpen}>
           <SummaryDialog
             trade={trade}
             slippage={slippage}
@@ -122,7 +124,7 @@ export default function SwapButton({ disabled }: { disabled: boolean }) {
             onConfirm={onSwap}
             allowance={allowance}
           />
-        </Dialog>
+        </ResponsiveDialog>
       )}
     </>
   )

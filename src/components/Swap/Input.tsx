@@ -23,7 +23,7 @@ import TokenInput, { TokenInputHandle } from './TokenInput'
 
 const USDC = styled(Row)`
   ${loadingTransitionCss};
-  gap: 0.25em;
+  gap: 0.25rem;
 `
 
 const Balance = styled(ThemedText.Body2)`
@@ -32,9 +32,9 @@ const Balance = styled(ThemedText.Body2)`
 
 const InputColumn = styled(Column)<{ disableHover?: boolean; isWide: boolean }>`
   background-color: ${({ theme }) => theme.module};
-  border-radius: ${({ theme }) => theme.borderRadius.small}em;
-  margin-bottom: 0.25em;
-  padding: ${({ isWide }) => (isWide ? '1em 0' : '1em 0 1.5em')};
+  border-radius: ${({ theme }) => theme.borderRadius.medium}rem;
+  margin-bottom: 0.25rem;
+  padding: ${({ isWide }) => (isWide ? '1rem 0' : '1rem 0 1.5rem')};
   position: relative;
 
   &:before {
@@ -85,7 +85,7 @@ interface FieldWrapperProps {
   field: Field
   maxAmount?: string
   approved?: boolean
-  impact?: PriceImpact
+  fiatValueChange?: PriceImpact
   subheader: string
 }
 
@@ -93,7 +93,7 @@ export function FieldWrapper({
   field,
   maxAmount,
   approved,
-  impact,
+  fiatValueChange,
   className,
   subheader,
 }: FieldWrapperProps & { className?: string }) {
@@ -146,7 +146,7 @@ export function FieldWrapper({
       onClick={onClick}
       className={className}
     >
-      <Row pad={1 /* em */}>
+      <Row pad={1 /* rem */}>
         <ThemedText.Subhead2 color={'secondary'}>{subheader}</ThemedText.Subhead2>
       </Row>
       <TokenInput
@@ -164,7 +164,10 @@ export function FieldWrapper({
           <Row>
             <USDC isLoading={isRouteLoading}>
               {usdc && `${formatCurrencyAmount(usdc, NumberType.FiatTokenQuantity)}`}
-              <PriceImpactRow impact={impact} />
+              <PriceImpactRow
+                impact={fiatValueChange}
+                tooltipText={t`The estimated difference between the USD values of input and output amounts.`}
+              />
             </USDC>
             {balance && (
               <Row gap={0.5}>

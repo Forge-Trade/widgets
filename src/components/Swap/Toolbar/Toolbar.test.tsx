@@ -1,4 +1,4 @@
-import { SupportedChainId, TradeType } from '@uniswap/sdk-core'
+import { ChainId, TradeType } from '@uniswap/sdk-core'
 import { DAI, ExtendedEther, USDC_MAINNET, WRAPPED_NATIVE_CURRENCY } from 'constants/tokens'
 import { SwapInfoProvider } from 'hooks/swap/useSwapInfo'
 import Module from 'module'
@@ -58,7 +58,7 @@ describe('Toolbar', () => {
       }
     )
     expect(component.queryByTestId('toolbar')).toBeNull()
-    expect(component.queryByText('Review swap')).toBeTruthy() // should be disabled
+    expect(component.queryByText('Select token')).toBeTruthy() // should be disabled
   })
 
   it('should render with both currencies specified, no amount input', () => {
@@ -146,8 +146,8 @@ describe('Toolbar', () => {
             stateAtom,
             getInitialTradeState({
               amount: '1',
-              [Field.INPUT]: ExtendedEther.onChain(SupportedChainId.MAINNET),
-              [Field.OUTPUT]: WRAPPED_NATIVE_CURRENCY[SupportedChainId.MAINNET],
+              [Field.INPUT]: ExtendedEther.onChain(ChainId.MAINNET),
+              [Field.OUTPUT]: WRAPPED_NATIVE_CURRENCY[ChainId.MAINNET],
             }),
           ],
         ],

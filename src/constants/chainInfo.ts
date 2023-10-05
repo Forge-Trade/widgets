@@ -1,5 +1,7 @@
 import ethereumLogoUrl from 'assets/images/ethereum-logo.png'
 import arbitrumLogoUrl from 'assets/svg/arbitrum_logo.svg'
+import baseLogo from 'assets/svg/base_logo.svg'
+import bnbLogo from 'assets/svg/bnb-logo.svg'
 import celoLogo from 'assets/svg/celo_logo.svg'
 import optimismLogoUrl from 'assets/svg/optimism_logo.svg'
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg'
@@ -222,6 +224,32 @@ const CHAIN_INFO: ChainInfoMap = {
     nativeCurrency: { name: 'Celo', symbol: 'aCELO', decimals: 18 },
     color: '#35D07F',
     backgroundColor: '#34d07f1f',
+  },
+  [SupportedChainId.BNB]: {
+    networkType: NetworkType.L1,
+    blockWaitMsBeforeWarning: ms`10m`,
+    bridge: 'https://cbridge.celer.network/1/56',
+    docs: 'https://docs.bnbchain.org/',
+    explorer: 'https://bscscan.com/',
+    infoLink: 'https://info.uniswap.org/#/bnb/',
+    label: 'BNB Chain',
+    logoUrl: bnbLogo,
+    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+    color: '#F0B90B',
+    backgroundColor: '#F0B90B',
+  },
+  [SupportedChainId.BASE]: {
+    networkType: NetworkType.L2,
+    blockWaitMsBeforeWarning: ms`25m`,
+    bridge: 'https://bridge.base.org/',
+    docs: 'https://docs.base.org/',
+    explorer: 'https://basescan.org/',
+    infoLink: 'https://info.uniswap.org/#/base/',
+    label: 'Base',
+    logoUrl: baseLogo,
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    color: '#0152ff',
+    backgroundColor: '#0152ff',
   },
 }
 

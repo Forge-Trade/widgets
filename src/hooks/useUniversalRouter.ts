@@ -1,18 +1,20 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { TransactionRequest, TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
+import { sendTransaction } from '@uniswap/conedison/provider/index'
 import { Percent } from '@uniswap/sdk-core'
 import { SwapRouter, UNIVERSAL_ROUTER_ADDRESS } from '@uniswap/universal-router-sdk'
 import { FeeOptions, toHex } from '@uniswap/v3-sdk'
 import { useWeb3React } from '@web3-react/core'
-import { ErrorCode } from 'constants/eip1193'
-import { SwapError } from 'errors'
-import { useCallback } from 'react'
+import { TX_GAS_MARGIN } from 'constants/misc'
+import { DismissableError, UserRejectedRequestError, WidgetPromise } from 'errors'
+import { useCallback, useMemo } from 'react'
 import { InterfaceTrade } from 'state/routing/types'
-import { calculateGasMargin } from 'utils/calculateGasMargin'
+import { SwapTransactionInfo, TransactionType } from 'state/transactions'
 import isZero from 'utils/isZero'
-import { getReason, swapErrorToUserReadableMessage } from 'utils/swapErrorToUserReadableMessage'
+import { isUserRejection } from 'utils/jsonRpcError'
+import { swapErrorToUserReadableMessage } from 'utils/swapErrorToUserReadableMessage'
 
+import { usePerfEventHandler } from './usePerfEventHandler'
 import { PermitSignature } from './usePermitAllowance'
 
 interface SwapOptions {
@@ -20,20 +22,6 @@ interface SwapOptions {
   deadline?: BigNumber
   permit?: PermitSignature
   feeOptions?: FeeOptions
-}
-
-function didUserReject(error: any): boolean {
-  const reason = getReason(error)
-  if (
-    error?.code === ErrorCode.USER_REJECTED_REQUEST ||
-    (reason?.match(/request/i) && reason?.match(/reject/i)) || // For Rainbow
-    reason?.match(/declined/i) || // For Frame
-    reason?.match(/cancelled by user/i) || // For SafePal
-    reason?.match(/user denied/i) // For Coinbase
-  ) {
-    return true
-  }
-  return false
 }
 
 /**
@@ -45,61 +33,55 @@ function didUserReject(error: any): boolean {
 export function useUniversalRouterSwapCallback(trade: InterfaceTrade | undefined, options: SwapOptions) {
   const { account, chainId, provider } = useWeb3React()
 
-  return useCallback(async (): Promise<TransactionResponse | null> => {
-    let tx: TransactionRequest
-    let response: TransactionResponse
-    try {
-      if (!account) throw new Error('missing account')
-      if (!chainId) throw new Error('missing chainId')
-      if (!provider) throw new Error('missing provider')
-      if (!trade) throw new Error('missing trade')
+  const swapCallback = useCallback(
+    () =>
+      WidgetPromise.from(
+        async () => {
+          if (!account) throw new Error('missing account')
+          if (!chainId) throw new Error('missing chainId')
+          if (!provider) throw new Error('missing provider')
+          if (!trade) throw new Error('missing trade')
 
-      const { calldata: data, value } = SwapRouter.swapERC20CallParameters(trade, {
-        slippageTolerance: options.slippageTolerance,
-        deadlineOrPreviousBlockhash: options.deadline?.toString(),
-        inputTokenPermit: options.permit,
-        fee: options.feeOptions,
-      })
-      tx = {
-        from: account,
-        to: UNIVERSAL_ROUTER_ADDRESS(chainId),
-        data,
-        // TODO: universal-router-sdk returns a non-hexlified value.
-        ...(value && !isZero(value) ? { value: toHex(value) } : {}),
-      }
+          const { calldata: data, value } = SwapRouter.swapERC20CallParameters(trade, {
+            slippageTolerance: options.slippageTolerance,
+            deadlineOrPreviousBlockhash: options.deadline?.toString(),
+            inputTokenPermit: options.permit,
+            fee: options.feeOptions,
+          })
+          const tx = {
+            from: account,
+            to: UNIVERSAL_ROUTER_ADDRESS(chainId),
+            data,
+            // TODO: universal-router-sdk returns a non-hexlified value.
+            ...(value && !isZero(value) ? { value: toHex(value) } : {}),
+          }
 
-      let gasEstimate: BigNumber
-      try {
-        gasEstimate = await provider.estimateGas(tx)
-      } catch (gasError) {
-        console.warn(gasError)
-        throw new SwapError({ header: t`Swap Error`, message: t`Your swap is expected to fail` })
-      }
-      const gasLimit = calculateGasMargin(gasEstimate)
-      response = await provider.getSigner().sendTransaction({ ...tx, gasLimit })
-    } catch (swapError) {
-      if (didUserReject(swapError)) {
-        return null
-      }
-      const message = swapErrorToUserReadableMessage(swapError)
-      throw new SwapError({
-        message,
-      })
-    }
-    if (tx.data !== response.data) {
-      throw new SwapError({
-        message: t`Your swap was modified through your wallet. If this was a mistake, please cancel immediately or risk losing your funds.`,
-      })
-    }
-    return response
-  }, [
-    account,
-    chainId,
-    options.deadline,
-    options.feeOptions,
-    options.permit,
-    options.slippageTolerance,
-    provider,
-    trade,
-  ])
+          const response = await sendTransaction(provider, tx, TX_GAS_MARGIN)
+          if (tx.data !== response.data) {
+            throw new DismissableError({
+              message: t`Your swap was modified through your wallet. If this was a mistake, please cancel immediately or risk losing your funds.`,
+              error: 'Swap was modified in wallet.',
+            })
+          }
+
+          return {
+            type: TransactionType.SWAP,
+            response,
+            tradeType: trade.tradeType,
+            trade,
+            slippageTolerance: options.slippageTolerance,
+          } as SwapTransactionInfo
+        },
+        null,
+        (error) => {
+          if (error instanceof DismissableError) throw error
+          if (isUserRejection(error)) throw new UserRejectedRequestError()
+          throw new DismissableError({ message: swapErrorToUserReadableMessage(error), error })
+        }
+      ),
+    [account, chainId, options.deadline, options.feeOptions, options.permit, options.slippageTolerance, provider, trade]
+  )
+
+  const args = useMemo(() => trade && { trade }, [trade])
+  return usePerfEventHandler('onSwapSend', args, swapCallback)
 }

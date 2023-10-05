@@ -3,6 +3,7 @@ import 'polyfills'
 import Swap, { SwapProps } from 'components/Swap'
 import Widget, { WidgetProps } from 'components/Widget'
 
+export { getAssetsRepoURI, getNativeLogoURI, Logo, LogoUpdater, useLogo, useLogos } from './components/Logo'
 export type { Provider as EthersProvider } from '@ethersproject/abstract-provider'
 export type { JsonRpcProvider } from '@ethersproject/providers'
 export type { Currency } from '@uniswap/sdk-core'
@@ -16,6 +17,8 @@ export { SwapWidgetSkeleton } from 'components/Swap/Skeleton'
 export { SupportedChainId } from 'constants/chains'
 export type { SupportedLocale } from 'constants/locales'
 export { DEFAULT_LOCALE, SUPPORTED_LOCALES } from 'constants/locales'
+export type { WidgetPromise } from 'errors'
+export { UnknownError, UserRejectedRequestError, WidgetError } from 'errors'
 export { RouterPreference } from 'hooks/routing/types'
 export type { SwapController } from 'hooks/swap/useSyncController'
 export type { FeeOptions } from 'hooks/swap/useSyncConvenienceFee'
@@ -36,17 +39,25 @@ export type {
   OnAmountChange,
   OnExpandSwapDetails,
   OnInitialSwapQuote,
+  OnPermit2Allowance,
   OnReviewSwapClick,
+  OnRouterPreferenceChange,
   OnSettingsReset,
   OnSlippageChange,
   OnSubmitSwapClick,
   OnSwapApprove,
   OnSwapPriceUpdateAck,
+  OnSwapQuote,
+  OnSwapSend,
   OnSwitchTokens,
+  OnTokenAllowance,
   OnTokenChange,
   OnTokenSelectorClick,
   OnTransactionDeadlineChange,
+  OnWrapSend,
   SwapEventHandlers,
+  SwapPerfEventHandlers,
+  SwapSettingsEventHandlers,
 } from 'state/swap'
 export { Field } from 'state/swap'
 export type { Slippage } from 'state/swap/settings'

@@ -1,7 +1,8 @@
 import { t } from '@lingui/macro'
-import { formatCurrencyAmount, NumberType } from '@uniswap/conedison/format'
+import { formatCurrencyAmount, formatPriceImpact, NumberType } from '@uniswap/conedison/format'
 import { Currency, CurrencyAmount, Token } from '@uniswap/sdk-core'
 import Column from 'components/Column'
+import { useIsDialogPageCentered } from 'components/Dialog'
 import Row from 'components/Row'
 import Rule from 'components/Rule'
 import TokenImg from 'components/TokenImg'
@@ -9,6 +10,7 @@ import Tooltip, { SmallToolTipBody } from 'components/Tooltip'
 import { PriceImpact } from 'hooks/usePriceImpact'
 import { Slippage } from 'hooks/useSlippage'
 import { useWidgetWidth } from 'hooks/useWidgetWidth'
+import { useWindowWidth } from 'hooks/useWindowWidth'
 import { useAtomValue } from 'jotai/utils'
 import { ReactNode, useMemo } from 'react'
 import { InterfaceTrade } from 'state/routing/types'
@@ -23,8 +25,8 @@ import { getEstimateMessage } from './Estimate'
 
 const Label = styled.span`
   color: ${({ theme }) => theme.secondary};
-  margin-right: 0.5em;
-  max-width: 50%;
+  margin-right: 0.5rem;
+  max-width: 75%;
 `
 const Value = styled.span<{ color?: Color }>`
   color: ${({ color, theme }) => color && theme[color]};
@@ -37,13 +39,13 @@ const DetailValue = styled(Value)`
 `
 
 const RuleWrapper = styled.div`
-  margin: 0.75em 0.125em;
+  margin: 0.75rem 0.125rem;
 `
 
 const MAX_AMOUNT_STR_LENGTH = 9
 
 interface DetailProps {
-  label: string
+  label: string | ReactNode
   value: string | ReactNode
   color?: Color
 }
@@ -51,7 +53,7 @@ interface DetailProps {
 function Detail({ label, value, color }: DetailProps) {
   return (
     <ThemedText.Body2 userSelect>
-      <Row flex align="flex-start">
+      <Row flex align="flex-start" flow="no-wrap">
         <Label>{label}</Label>
         <DetailValue color={color}>{value}</DetailValue>
       </Row>
@@ -67,7 +69,11 @@ interface AmountProps {
 }
 
 function Amount({ tooltipText, label, amount, usdcAmount }: AmountProps) {
-  const width = useWidgetWidth()
+  const widgetWidth = useWidgetWidth()
+  const screenWidth = useWindowWidth()
+  const isDialogPageCenterd = useIsDialogPageCentered()
+  const width = isDialogPageCenterd ? screenWidth : widgetWidth
+
   const [amountFontSize, amountLineHeight] =
     width < WIDGET_BREAKPOINTS.MEDIUM
       ? width < WIDGET_BREAKPOINTS.EXTRA_SMALL
@@ -84,7 +90,7 @@ function Amount({ tooltipText, label, amount, usdcAmount }: AmountProps) {
   }
 
   return (
-    <Row flex align="flex-start">
+    <Row flex align="flex-start" gap={0.75}>
       <Row>
         <ThemedText.Body2 userSelect>
           <Label>{label}</Label>
@@ -130,7 +136,7 @@ export default function Details({ trade, slippage, gasUseEstimateUSD, inputUSDC,
   const [exchangeRate] = useTradeExchangeRate(trade)
 
   const { details, estimateMessage } = useMemo(() => {
-    const details: Array<[string, string] | [string, string | ReactNode, Color | undefined]> = []
+    const details: Array<[ReactNode, string] | [ReactNode, string | ReactNode, Color | undefined]> = []
 
     details.push([t`Exchange rate`, exchangeRate])
 
@@ -147,7 +153,7 @@ export default function Details({ trade, slippage, gasUseEstimateUSD, inputUSDC,
     }
 
     if (impact) {
-      details.push([t`Price impact`, impact?.percent ? impact?.toString() : '-', impact.warning])
+      details.push([t`Price impact`, impact?.percent ? formatPriceImpact(impact?.percent) : '-', impact.warning])
     }
 
     const { estimateMessage, descriptor, value } = getEstimateMessage(trade, slippage)
@@ -166,8 +172,8 @@ export default function Details({ trade, slippage, gasUseEstimateUSD, inputUSDC,
         </RuleWrapper>
       </Column>
       <Column gap={0.75}>
-        {details.map(([label, detail, color]) => (
-          <Detail key={label} label={label} value={detail} color={color} />
+        {details.map(([label, detail, color], i) => (
+          <Detail key={i} label={label} value={detail} color={color} />
         ))}
       </Column>
     </>
