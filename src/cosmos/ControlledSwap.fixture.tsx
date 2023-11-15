@@ -1,6 +1,6 @@
 import { tokens } from '@uniswap/default-token-list'
-import { Currency, TradeType } from '@uniswap/sdk-core'
-import { Field, SupportedChainId, SwapWidget } from '@uniswap/widgets'
+import { Currency, TradeType } from '@orbitalapes/sdk-core'
+import { Field, SupportedChainId, SwapWidget } from '@forge-trade/widgets'
 import Row from 'components/Row'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -8,6 +8,7 @@ import { nativeOnChain, USDC } from '../constants/tokens'
 import EventFeed, { Event, HANDLERS } from './EventFeed'
 import useOption from './useOption'
 import useProvider from './useProvider'
+export const EVMOS_LIST = 'https://raw.githubusercontent.com/Forge-Trade/tokenlist/main/src/tokenlist.json'
 
 function Fixture() {
   const [events, setEvents] = useState<Event[]>([])
@@ -43,14 +44,14 @@ function Fixture() {
   )
   const inputToken = useOption('input', {
     options: currencies,
-    defaultValue: SupportedChainId[SupportedChainId.MAINNET],
+    defaultValue: SupportedChainId[SupportedChainId.EVMOS],
   })
   const outputToken = useOption('output', {
     options: currencies,
-    defaultValue: `${SupportedChainId[SupportedChainId.MAINNET]} USDC`,
+    defaultValue: `${SupportedChainId[SupportedChainId.EVMOS]} USDC`,
   })
 
-  const connector = useProvider(SupportedChainId.MAINNET)
+  const connector = useProvider(SupportedChainId.EVMOS)
 
   const eventHandlers = useMemo(
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -87,7 +88,7 @@ function Fixture() {
         permit2
         value={value}
         provider={connector}
-        tokenList={tokens}
+        tokenList={EVMOS_LIST}
         {...eventHandlers}
         onAmountChange={onAmountChange}
       />

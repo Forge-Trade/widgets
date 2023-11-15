@@ -1,5 +1,5 @@
 import { formatPriceImpact } from '@uniswap/conedison/format'
-import { Currency, CurrencyAmount } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount } from '@orbitalapes/sdk-core'
 import { PriceImpact } from 'hooks/usePriceImpact'
 import { ArrowDown, ArrowRight } from 'icons'
 import { PropsWithChildren } from 'react'

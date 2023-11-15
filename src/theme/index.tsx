@@ -109,7 +109,7 @@ export const defaultTheme = {
   },
   fontFamilyCode: 'IBM Plex Mono',
   tokenColorExtraction: false,
-  ...lightTheme,
+  ...darkTheme,
 }
 
 export function useSystemTheme() {

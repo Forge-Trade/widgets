@@ -1,6 +1,6 @@
 import { t, Trans } from '@lingui/macro'
 import { formatPriceImpact } from '@uniswap/conedison/format'
-import { Currency, CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Token } from '@orbitalapes/sdk-core'
 import ActionButton, { Action, ActionButtonColor } from 'components/ActionButton'
 import Column from 'components/Column'
 import { Header, MIN_PAGE_CENTERED_DIALOG_WIDTH, useCloseDialog, useIsDialogPageCentered } from 'components/Dialog'

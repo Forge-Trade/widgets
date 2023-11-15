@@ -7,16 +7,17 @@ import {
   lightTheme,
   SupportedChainId,
   SwapWidget,
-} from '@uniswap/widgets'
+} from '@forge-trade/widgets'
 import Row from 'components/Row'
 import { CHAIN_NAMES_TO_IDS } from 'constants/chains'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useValue } from 'react-cosmos/fixture'
 
-import { DAI, USDC_MAINNET } from '../constants/tokens'
+import { DAI, USDC_MAINNET, WRAPPED_NATIVE_CURRENCY } from '../constants/tokens'
 import EventFeed, { Event, HANDLERS } from './EventFeed'
 import useOption from './useOption'
 import useProvider from './useProvider'
+import { USDC_EVMOS, WEVMOS_EVMOS } from '@forge-trade/smart-order-router'
 
 const TOKEN_WITH_NO_LOGO = {
   chainId: 1,
@@ -25,10 +26,11 @@ const TOKEN_WITH_NO_LOGO = {
   name: 'Hedron',
   address: '0x3819f64f282bf135d62168C1e513280dAF905e06',
 }
+export const EVMOS_LIST = 'https://raw.githubusercontent.com/Forge-Trade/tokenlist/main/src/tokenlist.json'
 
 const mainnetTokens = tokens.filter((token) => token.chainId === SupportedChainId.MAINNET)
 const tokenLists: Record<string, TokenInfo[] | string> = {
-  Default: tokens,
+  Default: EVMOS_LIST,
   Extended: 'https://extendedtokens.uniswap.org/',
   'Mainnet only': mainnetTokens,
   Logoless: [TOKEN_WITH_NO_LOGO],
@@ -45,22 +47,21 @@ function Fixture() {
 
   const [convenienceFee] = useValue('convenienceFee', { defaultValue: 0 })
   const convenienceFeeRecipient = useOption('convenienceFeeRecipient', {
-    options: [
-      '0x1D9Cd50Dde9C19073B81303b3d930444d11552f7',
-      '0x0dA5533d5a9aA08c1792Ef2B6a7444E149cCB0AD',
-      '0xE6abE059E5e929fd17bef158902E73f0FEaCD68c',
-    ],
+    options: ['0x1D9Cd50Dde9C19073B81303b3d930444d11552f7'],
   })
 
   // TODO(zzmp): Changing defaults has no effect if done after the first render.
   const currencies: Record<string, string> = {
     Native: 'NATIVE',
-    DAI: DAI.address,
-    USDC: USDC_MAINNET.address,
+    USDC: USDC_EVMOS.address,
+    WEVMOS: WRAPPED_NATIVE_CURRENCY[9001].address,
   }
-  const defaultInputToken = useOption('defaultInputToken', { options: currencies, defaultValue: 'Native' })
+  const defaultInputToken = useOption('defaultInputToken', {
+    options: currencies,
+    defaultValue: WEVMOS_EVMOS,
+  })
   const [defaultInputAmount] = useValue('defaultInputAmount', { defaultValue: 0 })
-  const defaultOutputToken = useOption('defaultOutputToken', { options: currencies })
+  const defaultOutputToken = useOption('defaultOutputToken', { options: currencies, defaultValue: currencies.USDC })
   const [defaultOutputAmount] = useValue('defaultOutputAmount', { defaultValue: 0 })
 
   const [brandedFooter] = useValue('brandedFooter', { defaultValue: true })
@@ -70,20 +71,20 @@ function Fixture() {
   const [width] = useValue('width', { defaultValue: 360 })
 
   const [theme, setTheme] = useValue('theme', { defaultValue: defaultTheme })
-  const [darkMode] = useValue('darkMode', { defaultValue: false })
+  const [darkMode] = useValue('darkMode', { defaultValue: true })
   useEffect(() => setTheme((theme) => ({ ...theme, ...(darkMode ? darkTheme : lightTheme) })), [darkMode, setTheme])
 
   const defaultNetwork = useOption('defaultChainId', {
     options: Object.keys(CHAIN_NAMES_TO_IDS),
-    defaultValue: 'mainnet',
+    defaultValue: 'evmos',
   })
   const defaultChainId = defaultNetwork ? CHAIN_NAMES_TO_IDS[defaultNetwork] : undefined
 
-  const connector = useProvider(defaultChainId)
+  const connector = useProvider(9001)
 
   const tokenList = useOption('tokenList', { options: tokenLists, defaultValue: 'Default', nullable: false })
 
-  const [routerUrl] = useValue('routerUrl', { defaultValue: 'https://api.uniswap.org/v1/' })
+  const [routerUrl] = useValue('routerUrl', { defaultValue: 'https://forge-router.evmosdao.xyz/' })
 
   const dialogAnimation = useOption('dialogAnimation', {
     defaultValue: DialogAnimationType.FADE,

@@ -1,6 +1,6 @@
 import { BaseProvider } from '@ethersproject/providers'
 import { Trade } from '@uniswap/router-sdk'
-import { ChainId, Currency, Token, TradeType } from '@uniswap/sdk-core'
+import { ChainId, Currency, Token, TradeType } from '@orbitalapes/sdk-core'
 import { QuoteType, RouterPreference } from 'hooks/routing/types'
 import { OnSwapQuote } from 'state/swap'
 

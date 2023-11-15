@@ -1,5 +1,5 @@
 import { formatCurrencyAmount, NumberType } from '@uniswap/conedison/format'
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { CurrencyAmount, Token } from '@orbitalapes/sdk-core'
 import { BottomSheetModal } from 'components/BottomSheetModal'
 import Column from 'components/Column'
 import Popover from 'components/Popover'

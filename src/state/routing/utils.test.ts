@@ -1,4 +1,4 @@
-import { Token } from '@uniswap/sdk-core'
+import { Token } from '@orbitalapes/sdk-core'
 import { nativeOnChain } from 'constants/tokens'
 import { PoolType } from 'hooks/routing/types'
 import { amount, DAI, MKR, USDC } from 'test/utils'

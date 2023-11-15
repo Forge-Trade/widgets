@@ -26,12 +26,6 @@ export const JSON_RPC_FALLBACK_ENDPOINTS: Record<SupportedChainId, string[]> = {
     // "Fallback" URLs
     'https://rinkeby-light.eth.linkpool.io/',
   ],
-  [SupportedChainId.GOERLI]: [
-    // "Safe" URLs
-    'https://rpc.goerli.mudit.blog/',
-    // "Fallback" URLs
-    'https://rpc.ankr.com/eth_goerli',
-  ],
   [SupportedChainId.KOVAN]: [
     // "Fallback" URLs
     'https://eth-kovan.public.blastapi.io',
@@ -94,5 +88,13 @@ export const JSON_RPC_FALLBACK_ENDPOINTS: Record<SupportedChainId, string[]> = {
     // "Fallback" URLs
     'https://1rpc.io/base',
     'https://base.meowrpc.com',
+  ],  
+  [SupportedChainId.EVMOS]: [
+    // "Safe" URLs
+    'https://evmos.lava.build',
+    'https://json-rpc.evmos.tcnetwork.io',
+    'https://jsonrpc-evmos-ia.cosmosia.notional.ventures',
+    'https://evmos-mainnet.public.blastapi.io',
+    'https://evmos-evm.publicnode.com',
   ],
 }

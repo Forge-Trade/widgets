@@ -1,4 +1,4 @@
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { CurrencyAmount, Token } from '@orbitalapes/sdk-core'
 import { FeeAmount, Pool, Route as RouteV3 } from '@uniswap/v3-sdk'
 
 // helper function to make amounts more readable

@@ -6,9 +6,10 @@ import BaseLogo from '../../assets/svg/base_logo.svg'
 import BnbLogo from '../../assets/svg/bnb-logo.svg'
 import CeloLogo from '../../assets/svg/celo_logo.svg'
 import MaticLogo from '../../assets/svg/matic-token-icon.svg'
+import EvmosLogo from '../../assets/images/evmos-logo-alt.png'
 import { LogoTableInput } from './LogoTable'
 
-type Network = 'ethereum' | 'arbitrum' | 'optimism' | 'polygon' | 'celo' | 'smartchain' | 'base'
+type Network = 'ethereum' | 'arbitrum' | 'optimism' | 'polygon' | 'celo' | 'smartchain' | 'base' | 'evmos'
 
 function chainIdToNetworkName(networkId: SupportedChainId): Network | undefined {
   switch (networkId) {
@@ -26,8 +27,10 @@ function chainIdToNetworkName(networkId: SupportedChainId): Network | undefined 
       return 'smartchain'
     case SupportedChainId.BASE:
       return 'base'
+    case SupportedChainId.EVMOS:
+      return 'evmos'
     default:
-      return 'ethereum'
+      return 'evmos'
   }
 }
 
@@ -56,6 +59,8 @@ export function getNativeLogoURI(chainId: SupportedChainId = SupportedChainId.MA
       return BnbLogo
     case SupportedChainId.BASE:
       return BaseLogo
+    case SupportedChainId.EVMOS:
+      return EvmosLogo
     default:
       return EthereumLogo
   }

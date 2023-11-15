@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { CurrencyAmount, Percent, TradeType } from '@uniswap/sdk-core'
+import { CurrencyAmount, Percent, TradeType } from '@orbitalapes/sdk-core'
 import { InterfaceTrade } from 'state/routing/types'
 import { Transaction, TransactionType } from 'state/transactions'
 import { renderComponent } from 'test'

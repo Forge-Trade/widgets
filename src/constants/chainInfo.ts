@@ -9,7 +9,7 @@ import ms from 'ms.macro'
 
 import { SupportedChainId, SupportedL1ChainId, SupportedL2ChainId } from './chains'
 
-export const STANDARD_L1_BLOCK_TIME = ms`12s`
+export const STANDARD_L1_BLOCK_TIME = ms`4s`
 
 export enum NetworkType {
   L1,
@@ -99,16 +99,6 @@ const CHAIN_INFO: ChainInfoMap = {
     logoUrl: ethereumLogoUrl,
     nativeCurrency: { name: 'Kovan Ether', symbol: 'kovETH', decimals: 18 },
     color: '#FF0420',
-  },
-  [SupportedChainId.GOERLI]: {
-    networkType: NetworkType.L1,
-    docs: 'https://docs.uniswap.org/',
-    explorer: 'https://goerli.etherscan.io/',
-    infoLink: 'https://info.uniswap.org/#/',
-    label: 'Görli',
-    logoUrl: ethereumLogoUrl,
-    nativeCurrency: { name: 'Görli Ether', symbol: 'görETH', decimals: 18 },
-    color: '#209853',
   },
   [SupportedChainId.OPTIMISM]: {
     networkType: NetworkType.L2,
@@ -250,6 +240,17 @@ const CHAIN_INFO: ChainInfoMap = {
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
     color: '#0152ff',
     backgroundColor: '#0152ff',
+  },
+  [SupportedChainId.EVMOS]: {
+    networkType: NetworkType.L2,
+    blockWaitMsBeforeWarning: ms`10m`,
+    bridge: 'https://bridge.base.org/',
+    docs: 'https://docs.forge.trade/',
+    explorer: 'https://escan.live/',
+    infoLink: 'https://docs.evmos.org/',
+    label: 'Evmos',
+    logoUrl: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/evmos/images/evmos.png',
+    nativeCurrency: { name: 'Evmos', symbol: 'EVMOS', decimals: 18 },
   },
 }
 

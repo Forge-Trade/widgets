@@ -1,4 +1,4 @@
-import { defaultTheme, SwapEventHandlers, TransactionEventHandlers, WidgetEventHandlers } from '@uniswap/widgets'
+import { defaultTheme, SwapEventHandlers, TransactionEventHandlers, WidgetEventHandlers } from '@forge-trade/widgets'
 import Row from 'components/Row'
 import { useState } from 'react'
 import styled from 'styled-components/macro'
@@ -23,6 +23,7 @@ const EventRow = styled.div`
   padding: 0.2rem 0.2rem 0.5rem;
 `
 const EventData = styled.pre`
+  color: #eee;
   margin: 0.5rem 0 0;
 `
 

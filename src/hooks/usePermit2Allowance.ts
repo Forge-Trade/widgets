@@ -1,5 +1,5 @@
 import { PERMIT2_ADDRESS } from '@uniswap/permit2-sdk'
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { CurrencyAmount, Token } from '@orbitalapes/sdk-core'
 import { useWeb3React } from '@web3-react/core'
 import { STANDARD_L1_BLOCK_TIME } from 'constants/chainInfo'
 import { useAddTransactionInfo, usePendingApproval } from 'hooks/transactions'

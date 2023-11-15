@@ -1,7 +1,7 @@
 import 'jest-environment-hardhat'
 
 import tokenList from '@uniswap/default-token-list'
-import { Currency, CurrencyAmount, Percent } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Percent } from '@orbitalapes/sdk-core'
 import { dynamicActivate } from 'i18n'
 import fetch from 'jest-fetch-mock'
 

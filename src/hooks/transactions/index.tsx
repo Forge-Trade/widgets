@@ -1,5 +1,5 @@
 import { TransactionReceipt } from '@ethersproject/abstract-provider'
-import { Token } from '@uniswap/sdk-core'
+import { Token } from '@orbitalapes/sdk-core'
 import { useWeb3React } from '@web3-react/core'
 import { useAtomValue, useUpdateAtom } from 'jotai/utils'
 import ms from 'ms.macro'

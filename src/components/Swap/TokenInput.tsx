@@ -1,6 +1,6 @@
 import 'setimmediate'
 
-import { Currency } from '@uniswap/sdk-core'
+import { Currency } from '@orbitalapes/sdk-core'
 import { loadingTransitionCss } from 'css/loading'
 import { forwardRef, PropsWithChildren, useCallback, useImperativeHandle, useRef } from 'react'
 import { Field } from 'state/swap'

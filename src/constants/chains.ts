@@ -5,7 +5,6 @@ export enum SupportedChainId {
   MAINNET = 1,
   ROPSTEN = 3,
   RINKEBY = 4,
-  GOERLI = 5,
   KOVAN = 42,
 
   ARBITRUM_ONE = 42161,
@@ -23,13 +22,13 @@ export enum SupportedChainId {
   BNB = 56,
 
   BASE = 8453,
+  EVMOS = 9001,
 }
 
 export enum ChainName {
   MAINNET = 'mainnet',
   ROPSTEN = 'ropsten',
   RINKEBY = 'rinkeby',
-  GOERLI = 'goerli',
   KOVAN = 'kovan',
   OPTIMISM = 'optimism-mainnet',
   OPTIMISM_GOERLI = 'optimism-goerli',
@@ -41,13 +40,13 @@ export enum ChainName {
   CELO_ALFAJORES = 'celo-alfajores',
   BNB = 'bnb',
   BASE = 'base',
+  EVMOS = 'evmos',
 }
 
 export const CHAIN_NAMES_TO_IDS: { [chainName: string]: SupportedChainId } = {
   [ChainName.MAINNET]: SupportedChainId.MAINNET,
   [ChainName.ROPSTEN]: SupportedChainId.ROPSTEN,
   [ChainName.RINKEBY]: SupportedChainId.RINKEBY,
-  [ChainName.GOERLI]: SupportedChainId.GOERLI,
   [ChainName.KOVAN]: SupportedChainId.KOVAN,
   [ChainName.POLYGON]: SupportedChainId.POLYGON,
   [ChainName.POLYGON_MUMBAI]: SupportedChainId.POLYGON_MUMBAI,
@@ -59,6 +58,7 @@ export const CHAIN_NAMES_TO_IDS: { [chainName: string]: SupportedChainId } = {
   [ChainName.CELO_ALFAJORES]: SupportedChainId.CELO_ALFAJORES,
   [ChainName.BNB]: SupportedChainId.BNB,
   [ChainName.BASE]: SupportedChainId.BASE,
+  [ChainName.EVMOS]: SupportedChainId.EVMOS,
 }
 
 /**
@@ -76,6 +76,7 @@ export const SUPPORTED_GAS_ESTIMATE_CHAIN_IDS = [
   SupportedChainId.CELO,
   SupportedChainId.BNB,
   SupportedChainId.BASE,
+  SupportedChainId.EVMOS,
 ]
 
 /**
@@ -85,7 +86,6 @@ export const L1_CHAIN_IDS = [
   SupportedChainId.MAINNET,
   SupportedChainId.ROPSTEN,
   SupportedChainId.RINKEBY,
-  SupportedChainId.GOERLI,
   SupportedChainId.KOVAN,
   SupportedChainId.POLYGON,
   SupportedChainId.POLYGON_MUMBAI,
@@ -105,6 +105,8 @@ export const L2_CHAIN_IDS = [
   SupportedChainId.OPTIMISM,
   SupportedChainId.OPTIMISM_GOERLI,
   SupportedChainId.BASE,
+  SupportedChainId.EVMOS,
+
 ] as const
 
 export type SupportedL2ChainId = typeof L2_CHAIN_IDS[number]

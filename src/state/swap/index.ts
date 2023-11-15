@@ -1,4 +1,4 @@
-import { Currency, TradeType } from '@uniswap/sdk-core'
+import { Currency, TradeType } from '@orbitalapes/sdk-core'
 import { FeeOptions } from '@uniswap/v3-sdk'
 import { SupportedChainId } from 'constants/chains'
 import { nativeOnChain } from 'constants/tokens'
@@ -39,7 +39,7 @@ export interface Swap {
 const initialSwap: Swap = {
   type: TradeType.EXACT_INPUT,
   amount: '',
-  [Field.INPUT]: nativeOnChain(SupportedChainId.MAINNET),
+  [Field.INPUT]: nativeOnChain(SupportedChainId.EVMOS),
 }
 
 export const controlledAtom = atom<Swap | undefined>(undefined)

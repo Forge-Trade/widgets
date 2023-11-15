@@ -32,11 +32,10 @@ const Wrapper = styled(Row)`
 export default memo(function BrandedFooter() {
   return (
     <Wrapper justify="center">
-      <UniswapA href={`https://uniswap.org/`}>
+      <UniswapA href={`https://app.forge.trade/`}>
         <Row gap={0.25}>
-          <Logo />
           <ThemedText.Caption>
-            <Trans>Powered by the Uniswap protocol</Trans>
+            <Trans>🔥 Powered by Forge on Evmos</Trans>
           </ThemedText.Caption>
         </Row>
       </UniswapA>

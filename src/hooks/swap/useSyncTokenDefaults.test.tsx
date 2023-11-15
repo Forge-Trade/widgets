@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react'
-import { TradeType } from '@uniswap/sdk-core'
+import { TradeType } from '@orbitalapes/sdk-core'
 import { SupportedChainId } from 'constants/chains'
 import { DAI_POLYGON, nativeOnChain } from 'constants/tokens'
 import { USDC_MAINNET } from 'constants/tokens'

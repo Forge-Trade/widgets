@@ -62,7 +62,7 @@ module.exports = (webpackConfig) => {
     resolve: {
       ...resolve,
       alias: {
-        '@uniswap/widgets': path.resolve(__dirname, 'dist/'),
+        '@forge-trade/widgets': path.resolve(__dirname, 'dist/'),
       },
     },
     module: {

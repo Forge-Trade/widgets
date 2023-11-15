@@ -1,5 +1,5 @@
 import { formatCurrencyAmount, formatPrice, NumberType } from '@uniswap/conedison/format'
-import { Currency, CurrencyAmount } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount } from '@orbitalapes/sdk-core'
 import Row from 'components/Row'
 import { useCallback, useMemo, useState } from 'react'
 import { InterfaceTrade } from 'state/routing/types'

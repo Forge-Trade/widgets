@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Price, Token, TradeType } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Price, Token, TradeType } from '@orbitalapes/sdk-core'
 import { useAtom } from 'jotai'
 import { useMemo, useRef } from 'react'
 import { routerPreferenceAtom } from 'state/swap/settings'

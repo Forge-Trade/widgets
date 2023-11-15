@@ -1,5 +1,5 @@
 // a list of tokens by chain
-import { NativeCurrency, Token } from '@uniswap/sdk-core'
+import { NativeCurrency, Token } from '@orbitalapes/sdk-core'
 
 import { SupportedChainId } from './chains'
 import {
@@ -26,6 +26,7 @@ import {
   TRIBE,
   USDC_BASE,
   USDC_BNB_CHAIN,
+  USDC_EVMOS,
   USDC_MAINNET,
   USDC_POLYGON,
   USDT,
@@ -39,6 +40,7 @@ import {
   WETH_POLYGON,
   WRAPPED_NATIVE_CURRENCY,
 } from './tokens'
+const EVMOS_LIST = 'https://raw.githubusercontent.com/Forge-Trade/tokenlist/main/src/tokenlist.json'
 
 type ChainTokenList = {
   readonly [chainId: number]: Array<Token | NativeCurrency>
@@ -88,6 +90,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     PORTAL_USDC_CELO,
     PORTAL_ETH_CELO,
   ],
+  [SupportedChainId.EVMOS]: [...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.EVMOS], USDC_EVMOS],
   [SupportedChainId.BNB]: [
     nativeOnChain(SupportedChainId.BNB),
     USDC_BNB_CHAIN,

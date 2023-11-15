@@ -1,4 +1,4 @@
-import { ChainId } from '@uniswap/sdk-core'
+import { ChainId } from '@orbitalapes/sdk-core'
 import { nativeOnChain } from 'constants/tokens'
 import { renderHook } from 'test'
 

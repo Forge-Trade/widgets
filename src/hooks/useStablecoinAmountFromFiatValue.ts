@@ -1,4 +1,4 @@
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { CurrencyAmount, Token } from '@orbitalapes/sdk-core'
 import { useWeb3React } from '@web3-react/core'
 import { SupportedChainId } from 'constants/chains'
 import { CUSD_CELO, DAI_OPTIMISM, USDC_ARBITRUM, USDC_BASE, USDC_MAINNET, USDC_POLYGON } from 'constants/tokens'

@@ -4,7 +4,6 @@ const DEFAULT_NETWORKS = [
   SupportedChainId.MAINNET,
   SupportedChainId.ROPSTEN,
   SupportedChainId.RINKEBY,
-  SupportedChainId.GOERLI,
   SupportedChainId.KOVAN,
 ]
 

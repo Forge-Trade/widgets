@@ -1,5 +1,5 @@
 import { MixedRoute, partitionMixedRouteByProtocol, Protocol } from '@uniswap/router-sdk'
-import { Currency, CurrencyAmount, Percent, Token } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Percent, Token } from '@orbitalapes/sdk-core'
 import { Pair } from '@uniswap/v2-sdk'
 import { Pool } from '@uniswap/v3-sdk'
 import { useWeb3React } from '@web3-react/core'

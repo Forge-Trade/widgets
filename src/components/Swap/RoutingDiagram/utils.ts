@@ -1,5 +1,5 @@
 import { Protocol } from '@uniswap/router-sdk'
-import { Currency, Percent } from '@uniswap/sdk-core'
+import { Currency, Percent } from '@orbitalapes/sdk-core'
 import { FeeAmount } from '@uniswap/v3-sdk'
 import { InterfaceTrade } from 'state/routing/types'
 import { getFeeAmount } from 'utils/prices'

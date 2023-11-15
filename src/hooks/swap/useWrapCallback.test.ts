@@ -1,5 +1,5 @@
 import { parseEther } from '@ethersproject/units'
-import { CurrencyAmount } from '@uniswap/sdk-core'
+import { CurrencyAmount } from '@orbitalapes/sdk-core'
 import { SupportedChainId } from 'constants/chains'
 import { ExtendedEther } from 'constants/tokens'
 import { Field, stateAtom, swapEventHandlersAtom } from 'state/swap'

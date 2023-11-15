@@ -1,5 +1,5 @@
 import { PERMIT2_ADDRESS } from '@uniswap/permit2-sdk'
-import { CurrencyAmount, MaxUint256 } from '@uniswap/sdk-core'
+import { CurrencyAmount, MaxUint256 } from '@orbitalapes/sdk-core'
 import { UNIVERSAL_ROUTER_ADDRESS } from '@uniswap/universal-router-sdk'
 import { SupportedChainId } from 'constants/chains'
 import { UNI } from 'constants/tokens'

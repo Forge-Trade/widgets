@@ -1,6 +1,6 @@
 import { BigNumberish } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
-import { CurrencyAmount, MaxUint256, Token } from '@uniswap/sdk-core'
+import { CurrencyAmount, MaxUint256, Token } from '@orbitalapes/sdk-core'
 import { Erc20 } from 'abis/types'
 import { UserRejectedRequestError, WidgetError, WidgetPromise } from 'errors'
 import { useSingleCallResult } from 'hooks/multicall'

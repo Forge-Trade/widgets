@@ -1,5 +1,5 @@
 import { t, Trans } from '@lingui/macro'
-import { Currency } from '@uniswap/sdk-core'
+import { Currency } from '@orbitalapes/sdk-core'
 import { useWeb3React } from '@web3-react/core'
 import { inputCss, StringInput } from 'components/Input'
 import { ResponsiveDialog } from 'components/ResponsiveDialog'

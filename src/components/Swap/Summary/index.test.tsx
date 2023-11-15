@@ -1,4 +1,4 @@
-import { CurrencyAmount, Percent, TradeType } from '@uniswap/sdk-core'
+import { CurrencyAmount, Percent, TradeType } from '@orbitalapes/sdk-core'
 import assert from 'assert'
 import { SwapInfoProvider } from 'hooks/swap/useSwapInfo'
 import * as usePermit2Allowance from 'hooks/usePermit2Allowance'

@@ -24,4 +24,5 @@ export enum PoolType {
 export enum SwapRouterNativeAssets {
   MATIC = 'MATIC',
   ETH = 'ETH',
+  EVMOS = 'EVMOS',
 }

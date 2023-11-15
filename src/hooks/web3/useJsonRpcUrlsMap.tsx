@@ -21,7 +21,6 @@ function toJsonRpcMap<T>(getChainConnections: (chainId: SupportedChainId) => T):
     [SupportedChainId.MAINNET]: getChainConnections(SupportedChainId.MAINNET),
     [SupportedChainId.ROPSTEN]: getChainConnections(SupportedChainId.ROPSTEN),
     [SupportedChainId.RINKEBY]: getChainConnections(SupportedChainId.RINKEBY),
-    [SupportedChainId.GOERLI]: getChainConnections(SupportedChainId.GOERLI),
     [SupportedChainId.KOVAN]: getChainConnections(SupportedChainId.KOVAN),
     [SupportedChainId.POLYGON]: getChainConnections(SupportedChainId.POLYGON),
     [SupportedChainId.POLYGON_MUMBAI]: getChainConnections(SupportedChainId.POLYGON_MUMBAI),
@@ -33,6 +32,7 @@ function toJsonRpcMap<T>(getChainConnections: (chainId: SupportedChainId) => T):
     [SupportedChainId.CELO_ALFAJORES]: getChainConnections(SupportedChainId.CELO_ALFAJORES),
     [SupportedChainId.BNB]: getChainConnections(SupportedChainId.BNB),
     [SupportedChainId.BASE]: getChainConnections(SupportedChainId.BASE),
+    [SupportedChainId.EVMOS]: getChainConnections(SupportedChainId.EVMOS),
   }
 }
 

@@ -1,4 +1,4 @@
-import { TradeType } from '@uniswap/sdk-core'
+import { TradeType } from '@orbitalapes/sdk-core'
 import { Field } from 'state/swap'
 
 export function isExactInput(tradeType: TradeType): boolean {

@@ -1,4 +1,4 @@
-import { Currency, Ether, NativeCurrency, Token, WETH9 } from '@uniswap/sdk-core'
+import { Currency, Ether, NativeCurrency, Token, WETH9 } from '@orbitalapes/sdk-core'
 import invariant from 'tiny-invariant'
 
 import { UNI_ADDRESS } from './addresses'
@@ -25,13 +25,7 @@ export const USDC_RINKEBY = new Token(
   'tUSDC',
   'test USD//C'
 )
-export const USDC_GOERLI = new Token(
-  SupportedChainId.GOERLI,
-  '0x07865c6e87b9f70255377e024ace6630c1eaa37f',
-  6,
-  'USDC',
-  'USD//C'
-)
+
 export const USDC_KOVAN = new Token(
   SupportedChainId.KOVAN,
   '0x31eeb2d0f9b6fd8642914ab10f4dd473677d80df',
@@ -137,6 +131,13 @@ export const USDC_BASE = new Token(
   'USDC',
   'USD Coin'
 )
+export const USDC_EVMOS = new Token(
+  SupportedChainId.BASE,
+  '0xf1faE9eC886C5F6E4ea13dA2456087Bd72F02cD1',
+  6,
+  'USDC',
+  'USD Coin'
+)
 export const USDC: { [chainId in SupportedChainId]: Token } = {
   [SupportedChainId.MAINNET]: USDC_MAINNET,
   [SupportedChainId.ARBITRUM_ONE]: USDC_ARBITRUM,
@@ -147,12 +148,12 @@ export const USDC: { [chainId in SupportedChainId]: Token } = {
   [SupportedChainId.POLYGON_MUMBAI]: USDC_POLYGON_MUMBAI,
   [SupportedChainId.CELO]: PORTAL_USDC_CELO,
   [SupportedChainId.CELO_ALFAJORES]: USDC_CELO_ALFAJORES,
-  [SupportedChainId.GOERLI]: USDC_GOERLI,
   [SupportedChainId.RINKEBY]: USDC_RINKEBY,
   [SupportedChainId.KOVAN]: USDC_KOVAN,
   [SupportedChainId.ROPSTEN]: USDC_ROPSTEN,
   [SupportedChainId.BNB]: USDC_BNB_CHAIN,
   [SupportedChainId.BASE]: USDC_BASE,
+  [SupportedChainId.EVMOS]: USDC_EVMOS,
 }
 export const DAI_POLYGON = new Token(
   SupportedChainId.POLYGON,
@@ -449,7 +450,6 @@ export const UNI: { [chainId: number]: Token } = {
   [SupportedChainId.MAINNET]: new Token(SupportedChainId.MAINNET, UNI_ADDRESS[1], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.RINKEBY]: new Token(SupportedChainId.RINKEBY, UNI_ADDRESS[4], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.ROPSTEN]: new Token(SupportedChainId.ROPSTEN, UNI_ADDRESS[3], 18, 'UNI', 'Uniswap'),
-  [SupportedChainId.GOERLI]: new Token(SupportedChainId.GOERLI, UNI_ADDRESS[5], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.KOVAN]: new Token(SupportedChainId.KOVAN, UNI_ADDRESS[42], 18, 'UNI', 'Uniswap'),
 }
 
@@ -513,6 +513,13 @@ export const WRAPPED_NATIVE_CURRENCY: { [chainId: number]: Token | undefined } =
     'WETH',
     'Wrapped Ether'
   ),
+  [SupportedChainId.EVMOS]: new Token(
+    SupportedChainId.EVMOS,
+    '0xd4949664cd82660aae99bedc034a0dea8a0bd517',
+    18,
+    'WEVMOS',
+    'Wrapped Evmos'
+  ),
 }
 
 export function isCelo(chainId: number): chainId is SupportedChainId.CELO | SupportedChainId.CELO_ALFAJORES {
@@ -566,16 +573,33 @@ export class ExtendedEther extends Ether {
   }
 }
 
+function isEvmos(chainId: number): chainId is SupportedChainId.EVMOS {
+  return chainId === SupportedChainId.EVMOS
+}
+class EvmosNativeCurrency extends NativeCurrency {
+  equals(other: Currency): boolean {
+    return other.isNative && other.chainId === this.chainId
+  }
+
+  get wrapped(): Token {
+    if (this.chainId !== SupportedChainId.EVMOS) throw new Error('Not Evmos')
+    const wrapped = WRAPPED_NATIVE_CURRENCY[this.chainId]
+    invariant(wrapped instanceof Token)
+    return wrapped
+  }
+
+  public constructor(chainId: number) {
+    if (chainId !== SupportedChainId.EVMOS) throw new Error('Not Evmos')
+    super(chainId, 18, 'EVMOS', 'Evmos')
+  }
+}
+
 const cachedNativeCurrency: { [chainId: number]: NativeCurrency | Token } = {}
 export function nativeOnChain(chainId: number): NativeCurrency | Token {
   if (cachedNativeCurrency[chainId]) return cachedNativeCurrency[chainId]
   let nativeCurrency: NativeCurrency | Token
-  if (isMatic(chainId)) {
-    nativeCurrency = new MaticNativeCurrency(chainId)
-  } else if (isCelo(chainId)) {
-    nativeCurrency = getCeloNativeCurrency(chainId)
-  } else if (isBnbChain(chainId)) {
-    nativeCurrency = new BnbChainNativeCurrency(chainId)
+  if (isEvmos(chainId)) {
+    nativeCurrency = new EvmosNativeCurrency(chainId)
   } else {
     nativeCurrency = ExtendedEther.onChain(chainId)
   }
@@ -591,12 +615,12 @@ export const TOKEN_SHORTHANDS: { [shorthand: string]: { [chainId in SupportedCha
     [SupportedChainId.OPTIMISM_GOERLI]: USDC_OPTIMISM_GOERLI.address,
     [SupportedChainId.POLYGON]: USDC_POLYGON.address,
     [SupportedChainId.POLYGON_MUMBAI]: USDC_POLYGON_MUMBAI.address,
-    [SupportedChainId.GOERLI]: USDC_GOERLI.address,
     [SupportedChainId.RINKEBY]: USDC_RINKEBY.address,
     [SupportedChainId.KOVAN]: USDC_KOVAN.address,
     [SupportedChainId.ROPSTEN]: USDC_ROPSTEN.address,
     [SupportedChainId.CELO]: PORTAL_USDC_CELO.address,
     [SupportedChainId.CELO_ALFAJORES]: USDC_CELO_ALFAJORES.address,
     [SupportedChainId.BASE]: USDC_BASE.address,
+    [SupportedChainId.EVMOS]: USDC_EVMOS.address,
   },
 }

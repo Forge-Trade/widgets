@@ -1,6 +1,6 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { sendTransaction } from '@uniswap/conedison/provider/index'
-import { TradeType } from '@uniswap/sdk-core'
+import { TradeType } from '@orbitalapes/sdk-core'
 import { SwapRouter, UNIVERSAL_ROUTER_ADDRESS } from '@uniswap/universal-router-sdk'
 import { SupportedChainId } from 'constants/chains'
 import { TWO_PERCENT } from 'constants/misc'

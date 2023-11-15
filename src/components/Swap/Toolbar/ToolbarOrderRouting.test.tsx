@@ -1,4 +1,4 @@
-import { CurrencyAmount, TradeType } from '@uniswap/sdk-core'
+import { CurrencyAmount, TradeType } from '@orbitalapes/sdk-core'
 import { InterfaceTrade } from 'state/routing/types'
 import { renderComponent } from 'test'
 import { buildMultiV3Route, buildSingleV3Route, DAI, USDC } from 'test/utils'

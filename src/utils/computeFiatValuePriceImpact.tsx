@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Percent } from '@uniswap/sdk-core'
+import { Currency, CurrencyAmount, Percent } from '@orbitalapes/sdk-core'
 import { ONE_HUNDRED_PERCENT } from 'constants/misc'
 import JSBI from 'jsbi'
 
