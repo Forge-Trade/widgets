@@ -26,7 +26,6 @@ import {
   TRIBE,
   USDC_BASE,
   USDC_BNB_CHAIN,
-  USDC_EVMOS,
   USDC_MAINNET,
   USDC_POLYGON,
   USDT,
@@ -90,7 +89,10 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     PORTAL_USDC_CELO,
     PORTAL_ETH_CELO,
   ],
-  [SupportedChainId.EVMOS]: [...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.EVMOS], USDC_EVMOS],
+  [SupportedChainId.EVMOS]: [
+    ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.EVMOS],
+    nativeOnChain(SupportedChainId.EVMOS),
+],
   [SupportedChainId.BNB]: [
     nativeOnChain(SupportedChainId.BNB),
     USDC_BNB_CHAIN,

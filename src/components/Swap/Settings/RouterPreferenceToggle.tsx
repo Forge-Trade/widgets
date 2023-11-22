@@ -39,7 +39,7 @@ export default function RouterPreferenceToggle() {
             <Trans>Auto Router API</Trans>
           </ThemedText.Subhead2>
         }
-        tooltip={<Trans>Use the Uniswap Labs API to get faster quotes.</Trans>}
+        tooltip={<Trans>Use the Forge Router API to get faster quotes.</Trans>}
       />
       <Toggle onToggle={onToggle} checked={routerPreference === RouterPreference.API} />
     </Row>

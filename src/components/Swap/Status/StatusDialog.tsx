@@ -63,7 +63,7 @@ export default function TransactionStatusDialog({ tx, onClose }: TransactionStat
         <Trans>
           Try increasing your slippage tolerance.
           <br />
-          NOTE: Fee on transfer and rebase tokens are incompatible with Uniswap V3.
+          NOTE: Fee on transfer and rebase tokens are incompatible with Forge.
         </Trans>
       }
       action={<Trans>Dismiss</Trans>}

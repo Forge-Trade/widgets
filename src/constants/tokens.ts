@@ -1,3 +1,4 @@
+import { USDC_NOBLE_EVMOS } from '@forge-trade/smart-order-router'
 import { Currency, Ether, NativeCurrency, Token, WETH9 } from '@orbitalapes/sdk-core'
 import invariant from 'tiny-invariant'
 
@@ -131,13 +132,7 @@ export const USDC_BASE = new Token(
   'USDC',
   'USD Coin'
 )
-export const USDC_EVMOS = new Token(
-  SupportedChainId.BASE,
-  '0xf1faE9eC886C5F6E4ea13dA2456087Bd72F02cD1',
-  6,
-  'USDC',
-  'USD Coin'
-)
+
 export const USDC: { [chainId in SupportedChainId]: Token } = {
   [SupportedChainId.MAINNET]: USDC_MAINNET,
   [SupportedChainId.ARBITRUM_ONE]: USDC_ARBITRUM,
@@ -153,7 +148,7 @@ export const USDC: { [chainId in SupportedChainId]: Token } = {
   [SupportedChainId.ROPSTEN]: USDC_ROPSTEN,
   [SupportedChainId.BNB]: USDC_BNB_CHAIN,
   [SupportedChainId.BASE]: USDC_BASE,
-  [SupportedChainId.EVMOS]: USDC_EVMOS,
+  [SupportedChainId.EVMOS]: USDC_NOBLE_EVMOS,
 }
 export const DAI_POLYGON = new Token(
   SupportedChainId.POLYGON,
@@ -621,6 +616,6 @@ export const TOKEN_SHORTHANDS: { [shorthand: string]: { [chainId in SupportedCha
     [SupportedChainId.CELO]: PORTAL_USDC_CELO.address,
     [SupportedChainId.CELO_ALFAJORES]: USDC_CELO_ALFAJORES.address,
     [SupportedChainId.BASE]: USDC_BASE.address,
-    [SupportedChainId.EVMOS]: USDC_EVMOS.address,
+    [SupportedChainId.EVMOS]: USDC_NOBLE_EVMOS.address,
   },
 }

@@ -104,7 +104,7 @@ function getAllowanceFailedAction(shouldRequestApproval: boolean, retry: () => v
     ) : (
       <PermitTooltipText
         text={t`${currency.symbol ?? 'token'} approval failed`}
-        content={t`A signature is needed to trade this token on the Uniswap protocol. For security, signatures expire after 30 days.`}
+        content={t`A signature is needed to trade this token on Forge. For security, signatures expire after 30 days.`}
       />
     ),
     onClick: retry,

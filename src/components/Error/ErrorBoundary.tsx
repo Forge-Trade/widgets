@@ -71,7 +71,7 @@ export default class ErrorBoundary extends Component<PropsWithChildren<ErrorBoun
             : () => window.location.reload()
         }
         onClick={() => {
-          window.open('https://support.uniswap.org/', '_blank', 'noopener,noreferrer')
+          window.open('https://github.com/Forge-Trade/widgets', '_blank', 'noopener,noreferrer')
         }}
       />
     )
