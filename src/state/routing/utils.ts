@@ -2,7 +2,7 @@ import { MixedRouteSDK } from '@forge-trade/router-sdk'
 import { Currency, CurrencyAmount, Token } from '@orbitalapes/sdk-core'
 import { Pair, Route as V2Route } from '@uniswap/v2-sdk'
 import { FeeAmount, Pool, Route as V3Route } from '@uniswap/v3-sdk'
-import { isPolygonChain } from 'constants/chains'
+import { isEvmosChain, isPolygonChain } from 'constants/chains'
 import { nativeOnChain } from 'constants/tokens'
 import { PoolType, SwapRouterNativeAssets } from 'hooks/routing/types'
 
@@ -145,7 +145,7 @@ function isVersionedRoute<T extends V2PoolInRoute | V3PoolInRoute>(
 // TODO: deprecate this once we can use `NATIVE` as a string for native currencies and it can be imported from an SDK
 export function currencyAddressForSwapQuote(currency: Currency): string {
   if (currency.isNative) {
-    return isPolygonChain(currency.chainId) ? SwapRouterNativeAssets.MATIC : SwapRouterNativeAssets.ETH
+    return isEvmosChain(currency.chainId) ? SwapRouterNativeAssets.EVMOS : SwapRouterNativeAssets.ETH
   }
 
   return currency.address

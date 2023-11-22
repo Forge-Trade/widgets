@@ -114,3 +114,7 @@ export type SupportedL2ChainId = typeof L2_CHAIN_IDS[number]
 export function isPolygonChain(chainId: number): chainId is SupportedChainId.POLYGON | SupportedChainId.POLYGON_MUMBAI {
   return chainId === SupportedChainId.POLYGON || chainId === SupportedChainId.POLYGON_MUMBAI
 }
+
+export function isEvmosChain(chainId: number): chainId is SupportedChainId.EVMOS  {
+  return chainId === SupportedChainId.EVMOS
+}
