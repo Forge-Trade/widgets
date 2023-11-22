@@ -12,7 +12,7 @@ import styled from 'styled-components/macro'
 import { lightTheme, ThemedText } from 'theme'
 import { WalletConnectQR } from 'utils/WalletConnect'
 
-const NO_WALLET_HELP_CENTER_URL = 'https://help.uniswap.org/en/articles/5391585-how-to-get-a-wallet'
+const NO_WALLET_HELP_CENTER_URL = 'https://academy.evmos.org/articles/wallet/'
 
 const Body = styled(Column)`
   display: grid;
@@ -140,12 +140,6 @@ export function ConnectWalletDialog() {
     <>
       <Header title={<Trans>Connect wallet</Trans>} />
       <Body align="stretch" padded>
-        <WalletConnectButton
-          walletName="WalletConnect"
-          logoSrc={WALLETCONNECT_ICON_URL}
-          walletConnectQR={connectors.walletConnectQR}
-          onClick={() => onActivate(connectors.walletConnect)}
-        />
         <MetaMaskButton
           walletName="MetaMask"
           logoSrc={METAMASK_ICON_URL}
