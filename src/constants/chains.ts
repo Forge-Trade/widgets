@@ -106,7 +106,6 @@ export const L2_CHAIN_IDS = [
   SupportedChainId.OPTIMISM_GOERLI,
   SupportedChainId.BASE,
   SupportedChainId.EVMOS,
-
 ] as const
 
 export type SupportedL2ChainId = typeof L2_CHAIN_IDS[number]
@@ -115,6 +114,6 @@ export function isPolygonChain(chainId: number): chainId is SupportedChainId.POL
   return chainId === SupportedChainId.POLYGON || chainId === SupportedChainId.POLYGON_MUMBAI
 }
 
-export function isEvmosChain(chainId: number): chainId is SupportedChainId.EVMOS  {
+export function isEvmosChain(chainId: number): chainId is SupportedChainId.EVMOS {
   return chainId === SupportedChainId.EVMOS
 }

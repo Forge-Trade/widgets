@@ -88,7 +88,7 @@ export const JSON_RPC_FALLBACK_ENDPOINTS: Record<SupportedChainId, string[]> = {
     // "Fallback" URLs
     'https://1rpc.io/base',
     'https://base.meowrpc.com',
-  ],  
+  ],
   [SupportedChainId.EVMOS]: [
     // "Safe" URLs
     'https://evmos.lava.build',

@@ -167,9 +167,9 @@ function useWeb3ReactConnectors({ defaultChainId, provider, jsonRpcUrlMap }: Pro
   const walletConnectDefaultOptions = useMemo(
     () => ({
       rpcMap: urlMap,
-      projectId: 'c6c9bacd35afa3eb9e6cccf6d8464395',
+      projectId: 'c5220802fbb362d942d7ef3813ed29c2',
       // this requires the connecting wallet to support eth mainnet
-      chains: [SupportedChainId.MAINNET],
+      chains: [SupportedChainId.EVMOS],
       optionalChains: [...L1_CHAIN_IDS, ...L2_CHAIN_IDS],
       optionalMethods: ['eth_signTypedData', 'eth_signTypedData_v4', 'eth_sign'],
       qrModalOptions: {
