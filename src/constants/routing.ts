@@ -92,7 +92,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [SupportedChainId.EVMOS]: [
     ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.EVMOS],
     nativeOnChain(SupportedChainId.EVMOS),
-],
+  ],
   [SupportedChainId.BNB]: [
     nativeOnChain(SupportedChainId.BNB),
     USDC_BNB_CHAIN,
