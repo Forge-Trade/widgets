@@ -1621,6 +1621,17 @@
   resolved "https://registry.npmjs.org/@fontsource/inter/-/inter-4.5.1.tgz"
   integrity sha512-mvtOvXNNVLlF1p/UbLgLrmz2RCOl6Ow+TqyiK10SosoLKX7edsXYiHFHb7XIZdjII6F2sJVPPsJXWhBnbXT2DQ==
 
+"@forge-trade/router-sdk@^1.7.2":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@forge-trade/router-sdk/-/router-sdk-1.7.2.tgz#ff04d00d5577d30b1af8da8adbdecd7056918b94"
+  integrity sha512-cLw0tfKhTVyhy7fSVpwvgdjyzaHj6ffE/CySp1uXqzooQARM5Ay4OVFyvvNSnvAH7v4nZITEemO/WSONmz20LA==
+  dependencies:
+    "@ethersproject/abi" "^5.5.0"
+    "@orbitalapes/sdk-core" "^3.2.6"
+    "@uniswap/swap-router-contracts" "^1.1.0"
+    "@uniswap/v2-sdk" "^3.2.0"
+    "@uniswap/v3-sdk" "^3.10.0"
+
 "@forge-trade/smart-order-router@3.5.8":
   version "3.5.8"
   resolved "https://registry.yarnpkg.com/@forge-trade/smart-order-router/-/smart-order-router-3.5.8.tgz#c2a227f2772d44cec133ca9d72206a238e320079"

@@ -1,4 +1,4 @@
-import { Protocol } from '@uniswap/router-sdk'
+import { Protocol } from '@forge-trade/router-sdk'
 import { Currency, Percent } from '@orbitalapes/sdk-core'
 import { FeeAmount } from '@uniswap/v3-sdk'
 import { InterfaceTrade } from 'state/routing/types'

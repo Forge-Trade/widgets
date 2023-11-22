@@ -1,5 +1,5 @@
 import { BaseQueryFn, createApi, FetchBaseQueryError, SkipToken, skipToken } from '@reduxjs/toolkit/query/react'
-import { Protocol } from '@uniswap/router-sdk'
+import { Protocol } from '@forge-trade/router-sdk'
 import { WidgetError, WidgetPromise } from 'errors'
 import { RouterPreference } from 'hooks/routing/types'
 import ms from 'ms.macro'

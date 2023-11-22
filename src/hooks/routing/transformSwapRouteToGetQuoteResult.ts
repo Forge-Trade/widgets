@@ -1,4 +1,4 @@
-import { Protocol } from '@uniswap/router-sdk'
+import { Protocol } from '@forge-trade/router-sdk'
 import type { SwapRoute } from '@forge-trade/smart-order-router'
 import { QuoteResult, QuoteState, V2PoolInRoute, V3PoolInRoute } from 'state/routing/types'
 import { isExactInput } from 'utils/tradeType'
