@@ -13,6 +13,7 @@ const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
   [SupportedChainId.CELO_ALFAJORES]: 'https://alfajores.celoscan.io',
   [SupportedChainId.BNB]: 'https://bscscan.com',
   [SupportedChainId.BASE]: 'https://basescan.org',
+  [SupportedChainId.EVMOS]: 'https://escan.live',
 }
 
 export enum ExplorerDataType {
@@ -29,6 +30,19 @@ export enum ExplorerDataType {
  * @param type the type of the data
  */
 export function getExplorerLink(chainId: number, data: string, type: ExplorerDataType): string {
+  if (chainId === SupportedChainId.EVMOS) {
+    switch (type) {
+      case ExplorerDataType.TRANSACTION:
+        return `https://escan.live/tx/${data}`
+      case ExplorerDataType.ADDRESS:
+      case ExplorerDataType.TOKEN:
+        return `https://escan.live/address/${data}`
+      case ExplorerDataType.BLOCK:
+        return `https://escan.live/block/${data}`
+      default:
+        return `https://escan.live/`
+    }
+  }
   if (chainId === SupportedChainId.ARBITRUM_ONE) {
     switch (type) {
       case ExplorerDataType.TRANSACTION:

@@ -47,7 +47,7 @@ function Fixture() {
 
   const [convenienceFee] = useValue('convenienceFee', { defaultValue: 1 })
   const [convenienceFeeRecipient] = useValue('convenienceFeeRecipient', {
-    defaultValue: '0x24BF5955eED3622b7779e07487dA7A24efD6E2de',
+    defaultValue: '0xD4aAF10434A92b0C0990a046A8fDf43ddbD87689',
   })
 
   // TODO(zzmp): Changing defaults has no effect if done after the first render.
