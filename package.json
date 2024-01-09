@@ -1,7 +1,7 @@
 {
   "name": "@forge-trade/widgets",
   "description": "Forge Widget Interface",
-  "version": "1.2.2",
+  "version": "1.2.5",
   "homepage": "https://github.com/forge-trade/widgets#readme",
   "repository": "https://github.com/forge-trade/widgets",
   "files": [

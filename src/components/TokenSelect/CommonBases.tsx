@@ -7,18 +7,18 @@ import { ThemedText } from 'theme'
 import { currencyId } from 'utils/currencyId'
 
 const BasesContainer = styled(Row)`
-  margin: 0 1.25rem;
+  margin: 0 0.25rem;
 `
 
 const activeCss = css`
   background-color: ${({ theme }) => theme.activeSoft};
   border-color: ${({ theme }) => theme.active};
-  color: ${({ theme }) => theme.active};
+  color: #eeeeee;
 `
 
 const BaseWrapper = styled(Row)<{ active?: boolean }>`
   border: 1px solid ${({ theme }) => theme.outline};
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   color: ${({ theme, active }) => (active ? theme.active : theme.primary)};
   cursor: pointer;
   padding: 0.5rem 0.75rem 0.5rem 0.5rem;
@@ -63,8 +63,8 @@ export default function CommonBases({
             key={currencyId(currency)}
             gap={0.25}
           >
-            <TokenImg token={currency} size={1.25} />
-            <ThemedText.ButtonMedium lineHeight="1.25rem">{currency.symbol}</ThemedText.ButtonMedium>
+            <TokenImg token={currency} size={1} />
+            <ThemedText.ButtonMedium lineHeight="1rem">{currency.symbol}</ThemedText.ButtonMedium>
           </BaseWrapper>
         )
       })}

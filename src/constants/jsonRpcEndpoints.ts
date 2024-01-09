@@ -91,6 +91,7 @@ export const JSON_RPC_FALLBACK_ENDPOINTS: Record<SupportedChainId, string[]> = {
   ],
   [SupportedChainId.EVMOS]: [
     // "Safe" URLs
+    'https://lb.nodies.app/v1/2172c4701af3452b81bbd35609ab9a08',
     'https://evmos.lava.build',
     'https://json-rpc.evmos.tcnetwork.io',
     'https://jsonrpc-evmos-ia.cosmosia.notional.ventures',

@@ -133,6 +133,21 @@ export const USDC_BASE = new Token(
   'USD Coin'
 )
 
+export const USDC_NOBLE = new Token(
+  SupportedChainId.EVMOS,
+  '0xf1fae9ec886c5f6e4ea13da2456087bd72f02cd1',
+  6,
+  'USDC',
+  'USD Coin'
+)
+export const STEVMOS = new Token(
+  SupportedChainId.EVMOS,
+  '0x2c68d1d6ab986ff4640b51e1f14c716a076e44c4',
+  18,
+  'stEVMOS',
+  'Staked Evmos'
+)
+
 export const USDC: { [chainId in SupportedChainId]: Token } = {
   [SupportedChainId.MAINNET]: USDC_MAINNET,
   [SupportedChainId.ARBITRUM_ONE]: USDC_ARBITRUM,
