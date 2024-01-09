@@ -18,12 +18,12 @@ const white = 'hsl(0, 0%, 100%)'
 const black = 'hsl(0, 0%, 0%)'
 
 const brandLight = 'hsl(328, 97%, 53%)'
-const brandDark = 'hsl(221, 96%, 64%)'
+const brandDark = 'hsl(8, 75%, 54%)'
 export const brand = brandLight
 
 const stateColors = {
-  active: 'hsl(221, 96%, 64%)',
-  activeSoft: 'hsla(221, 96%, 64%, 0.24)',
+  active: 'hsla(0, 0%, 20%, 1)',
+  activeSoft: 'hsla(0, 0%, 30%, 1)',
   success: 'hsl(145, 63.4%, 41.8%)',
   warningSoft: 'hsla(44, 86%, 51%, 0.24)',
   critical: '#FA2B39',
@@ -63,10 +63,10 @@ export const darkTheme: Colors = {
   // surface
   accent: brandDark,
   accentSoft: rgba(brandDark, 0.24),
-  container: 'hsla(224, 37%, 8%, 1)',
-  module: 'hsl(222, 37%, 12%)',
-  interactive: 'hsla(223, 28%, 22%, 1)',
-  outline: 'hsl(224, 33%, 16%)',
+  container: 'hsla(0, 0%, 10%, 1)',
+  module: 'hsl(0, 0%, 9%)',
+  interactive: 'hsl(0, 0%, 15%)',
+  outline: 'hsl(0, 0%, 15%)',
   dialog: black,
   scrim: 'hsla(224, 33%, 16%, 0.5)',
 
@@ -78,7 +78,7 @@ export const darkTheme: Colors = {
   onInteractive: white,
 
   deepShadow: 'hsla(0, 0%, 0%, 0.32), hsla(0, 0%, 0%, 0.24), hsla(0, 0%, 0%, 0.24)',
-  networkDefaultShadow: 'hsla(221, 96%, 64%, 0.16)',
+  networkDefaultShadow: rgba(brandDark, 0.24),
 
   // state
   ...stateColors,
@@ -92,10 +92,10 @@ export const darkTheme: Colors = {
  * Common border radius values in em
  */
 const defaultBorderRadius = {
-  large: 1.5,
-  medium: 1,
-  small: 0.75,
-  xsmall: 0.5,
+  large: 1,
+  medium: 0.75,
+  small: 0.5,
+  xsmall: 0.25,
 }
 
 export const defaultTheme = {

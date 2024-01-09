@@ -75,7 +75,7 @@ interface BubbledEvent extends SyntheticEvent {
 const TokenBalance = styled.div<{ isLoading: boolean }>`
   background-color: ${({ theme, isLoading }) => isLoading && theme.secondary};
   border-radius: 0.25rem;
-  padding: 0.375rem 0;
+  padding: 0.5rem 0;
 `
 
 function TokenOption({ index, value, style }: TokenOptionProps) {
@@ -104,8 +104,8 @@ function TokenOption({ index, value, style }: TokenOptionProps) {
     >
       <Row>
         <Row gap={0.5}>
-          <TokenImg token={value} size={2.25} />
-          <Column flex gap={0.125} align="flex-start">
+          <TokenImg token={value} size={2} />
+          <Column flex gap={0.1} align="flex-start">
             <ThemedText.Subhead1>{value.symbol}</ThemedText.Subhead1>
             <ThemedText.Body2 color="secondary">{value.name}</ThemedText.Body2>
           </Column>

@@ -105,19 +105,7 @@ export function TokenSelectDialogContent({ value, onSelect, onClose }: TokenSele
       <Header title={<Trans>Select token</Trans>} />
       <Column gap={0.75}>
         <Column gap={0.75} style={{ margin: '0 0.5rem' }}>
-          <Row pad={0.75} grow>
-            <SearchInputContainer gap={0.75} justify="start" flex>
-              <Search color="secondary" />
-              <ThemedText.Body1 flexGrow={1}>
-                <StringInput
-                  value={query}
-                  onChange={setQuery}
-                  placeholder={t`Search by token name or address`}
-                  onKeyDown={options?.onKeyDown}
-                  ref={input}
-                />
-              </ThemedText.Body1>
-            </SearchInputContainer>
+          <Row pad={1} grow>
           </Row>
           <CommonBases chainId={chainId} onSelect={onSelect} selected={value} />
         </Column>

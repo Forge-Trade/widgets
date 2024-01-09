@@ -45,7 +45,7 @@ function Fixture() {
     []
   )
 
-  const [convenienceFee] = useValue('convenienceFee', { defaultValue: 1 })
+  const [convenienceFee] = useValue('convenienceFee', { defaultValue: 3 })
   const [convenienceFeeRecipient] = useValue('convenienceFeeRecipient', {
     defaultValue: '0xD4aAF10434A92b0C0990a046A8fDf43ddbD87689',
   })

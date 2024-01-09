@@ -45,7 +45,7 @@ function TransactionStatus({ tx, onClose }: TransactionStatusProps) {
       </StatusHeader>
       <EtherscanLinkContainer flex justify="center">
         <EtherscanLink type={ExplorerDataType.TRANSACTION} data={tx.info.response.hash} showIcon={false} color="active">
-          <Trans>View on eScan</Trans>
+          <Trans>View on Escan</Trans>
         </EtherscanLink>
       </EtherscanLinkContainer>
       <ActionButton onClick={onClose}>
