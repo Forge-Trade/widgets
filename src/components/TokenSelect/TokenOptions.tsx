@@ -226,7 +226,6 @@ const TokenOptions = forwardRef<TokenOptionsHandle, TokenOptionsProps>(function 
       }}
     >
       {/* OnHover is a workaround to Safari's incorrect (overflow: overlay) implementation */}
-      <OnHover hover={hover} ref={onHover} />
       <AutoSizer disableWidth>
         {({ height }) => (
           <TokenList

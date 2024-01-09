@@ -131,7 +131,7 @@ interface DetailsProps {
 export default function Details({ trade, slippage, gasUseEstimateUSD, inputUSDC, outputUSDC, impact }: DetailsProps) {
   const { inputAmount, outputAmount } = trade
   const outputCurrency = outputAmount.currency
-  const integrator = window.location.hostname
+  const integrator = "External swap"
   const feeOptions = useAtomValue(feeOptionsAtom)
   const [exchangeRate] = useTradeExchangeRate(trade)
 
@@ -143,7 +143,7 @@ export default function Details({ trade, slippage, gasUseEstimateUSD, inputUSDC,
     if (feeOptions) {
       const fee = outputAmount.multiply(feeOptions.fee)
       if (fee.greaterThan(0)) {
-        const parsedFee = formatCurrencyAmount(fee, NumberType.FiatGasPrice)
+        const parsedFee = formatCurrencyAmount(fee, NumberType.SwapTradeAmount)
         details.push([t`${integrator} fee`, `${parsedFee} ${outputCurrency.symbol || currencyId(outputCurrency)}`])
       }
     }
