@@ -69,7 +69,7 @@ export default function ApproveButton({
           return { message: <Trans>Approve in your wallet</Trans>, icon: Spinner }
         }
         return {
-          message: <Trans>Approve {symbol} first</Trans>,
+          message: <Trans>Approve token {symbol}</Trans>,
           onClick: onApprove,
           children: <Trans>Approve</Trans>,
         }

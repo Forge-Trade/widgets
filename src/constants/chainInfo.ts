@@ -242,7 +242,7 @@ const CHAIN_INFO: ChainInfoMap = {
     backgroundColor: '#0152ff',
   },
   [SupportedChainId.EVMOS]: {
-    networkType: NetworkType.L2,
+    networkType: NetworkType.L1,
     blockWaitMsBeforeWarning: ms`10m`,
     bridge: 'https://bridge.base.org/',
     docs: 'https://docs.forge.trade/',

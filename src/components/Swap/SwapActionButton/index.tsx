@@ -7,11 +7,13 @@ import { useIsWrap } from 'hooks/swap/useWrapCallback'
 import { usePermit2 as usePermit2Enabled } from 'hooks/useSyncFlags'
 import { useMemo } from 'react'
 import { Field } from 'state/swap'
-
+import { ApprovalTransactionInfo, SwapTransactionInfo, TransactionType } from 'state/transactions'
 import ConnectWalletButton from './ConnectWalletButton'
 import SwapButton from './SwapButton'
 import SwitchChainButton from './SwitchChainButton'
 import WrapButton from './WrapButton'
+import ApproveButton from './ApproveButton'
+import { useApproval } from 'hooks/useApproval'
 
 export default function SwapActionButton() {
   const { account, isActive } = useWeb3React()
@@ -43,7 +45,9 @@ export default function SwapActionButton() {
     return <SwitchChainButton chainId={supportedTokenChainId} />
   } else if (isWrap) {
     return <WrapButton disabled={isDisabled} />
-  } else {
+  } else if (approval.state !== SwapApprovalState.APPROVED) {
+    return <ApproveButton trade={trade} {...approval}/>
+  }  else {
     return <SwapButton disabled={isDisabled} />
   }
 }
