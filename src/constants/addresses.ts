@@ -5,7 +5,7 @@ type AddressMap = { [chainId: number]: string }
 
 export const UNI_ADDRESS: AddressMap = {
   ...constructSameAddressMap('0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'),
-  [SupportedChainId.EVMOS]: '0x5b5e44da9718288244110e66a7cA6C537f36f948',
+  [SupportedChainId.EVMOS]: '0xf544365e7065966f190155F629cE0182fC68Eaa2',
 
 }
 

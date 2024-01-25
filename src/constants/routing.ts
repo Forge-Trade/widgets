@@ -39,7 +39,9 @@ import {
   WETH_POLYGON,
   WRAPPED_NATIVE_CURRENCY,
   USDC_NOBLE,
+  USDT_EVMOS,
   STEVMOS,
+  STATOM,
 } from './tokens'
 const EVMOS_LIST = 'https://raw.githubusercontent.com/Forge-Trade/tokenlist/main/src/tokenlist.json'
 
@@ -94,7 +96,9 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [SupportedChainId.EVMOS]: [
     ...WRAPPED_NATIVE_CURRENCIES_ONLY[SupportedChainId.EVMOS],
     STEVMOS,
+    STATOM,
     USDC_NOBLE,
+    USDT_EVMOS,
   ],
   [SupportedChainId.BNB]: [
     nativeOnChain(SupportedChainId.BNB),

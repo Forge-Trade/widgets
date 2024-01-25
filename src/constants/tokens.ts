@@ -137,7 +137,7 @@ export const USDC_NOBLE = new Token(
   SupportedChainId.EVMOS,
   '0xf1fae9ec886c5f6e4ea13da2456087bd72f02cd1',
   6,
-  'USDC',
+  'USDC (Noble)',
   'USD Coin'
 )
 export const STEVMOS = new Token(
@@ -146,6 +146,22 @@ export const STEVMOS = new Token(
   18,
   'stEVMOS',
   'Staked Evmos'
+)
+
+export const STATOM = new Token(
+  SupportedChainId.EVMOS,
+  '0xB5124FA2b2cF92B2D469b249433BA1c96BDF536D',
+  6,
+  'stATOM',
+  'Staked ATOM'
+)
+
+export const USDT_EVMOS = new Token(
+  SupportedChainId.EVMOS,
+  '0xB8f812B5943ab3BF941D5D4F1de90A4b326c5d8f',
+  6,
+  'USDT (Kava)',
+  'USDT (KAVA)'
 )
 
 export const USDC: { [chainId in SupportedChainId]: Token } = {
@@ -312,6 +328,13 @@ export const CELO_CELO = new Token(
   18,
   'CELO',
   'Celo'
+)
+export const AXLWETH_EVMOS = new Token(
+  SupportedChainId.EVMOS,
+  '0x50dE24B3f0B3136C50FA8A3B8ebc8BD80a269ce5',
+  18,
+  'axlWETH',
+  'axlWETH'
 )
 export const CUSD_CELO = new Token(
   SupportedChainId.CELO,
