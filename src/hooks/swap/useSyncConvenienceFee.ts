@@ -30,9 +30,6 @@ export default function useSyncConvenienceFee({ convenienceFee, convenienceFeeRe
         return
       }
     }
-    updateFeeOptions({
-      fee: new Percent(3, 10_000),
-      recipient: '0xD4aAF10434A92b0C0990a046A8fDf43ddbD87689',
-    })
+    updateFeeOptions(undefined)
   }, [chainId, convenienceFee, convenienceFeeRecipient, updateFeeOptions])
 }

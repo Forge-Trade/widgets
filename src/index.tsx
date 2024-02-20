@@ -81,7 +81,7 @@ export type SwapWidgetProps = SwapProps & WidgetProps
 export function SwapWidget(props: SwapWidgetProps) {
   return (
     <Widget {...props}>
-      <Swap {...props} convenienceFee={3} convenienceFeeRecipient={"0xD4aAF10434A92b0C0990a046A8fDf43ddbD87689"} />
+      <Swap {...props}/>
     </Widget>
   )
 }
