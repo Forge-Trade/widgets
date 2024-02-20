@@ -12,7 +12,6 @@ import { IconButton } from '../../Button'
 import Column from '../../Column'
 import { PopoverBoundaryProvider } from '../../Popover'
 import MaxSlippageSelect from './MaxSlippageSelect'
-import RouterPreferenceToggle from './RouterPreferenceToggle'
 import TransactionTtlInput from './TransactionTtlInput'
 
 const SettingsColumn = styled(Column)`
@@ -31,12 +30,6 @@ export function SettingsMenu() {
         If consumer doesn't pass in `routerUrl` as a prop, they have no choice but to use the client-side router,
         so don't show them the settings option.
         */}
-        {Boolean(routerUrl) && (
-          <>
-            <RouterPreferenceToggle />
-            <Rule />
-          </>
-        )}
         <MaxSlippageSelect />
         <Rule />
         <TransactionTtlInput />
